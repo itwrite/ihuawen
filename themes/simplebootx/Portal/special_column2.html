@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$name} {$seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$seo_keywords}" />
+    <meta name="description" content="{$seo_description}">
+    <tc_include file="Public:head" />
+
+    <style>
+        .tc-gridbox .item-image img{
+            height: 230px;
+            width: 100%;
+        }
+        .tc-gridbox .body{
+            height:120px;
+        }
+        .show-grid table{
+            background:none;
+        }
+        [class^='post-']{
+            color: #ffffff;
+        }
+        .post-footer{
+            padding-top: 50px;
+        }
+        .post-footer .col-md-4{
+            background: none;
+            border: 1px solid transparent;
+        }
+        .post-footer .col-md-4 .btn{
+            width: 96%;
+        }
+        .show-grid.columns [class^="col-"] {
+            /*padding: 0;*/
+            border: 0;
+            background: transparent;
+        }
+
+        .hot-articles .col-md-4:nth-child(3n){
+            padding-left: 6px;
+            padding-right: 0;
+            padding-bottom: 9px;
+        }
+        .hot-articles .col-md-4:nth-child(1),.hot-articles .col-md-4:nth-child(3n+1){
+            padding-left: 0px;
+            padding-right: 6px;
+            padding-bottom: 9px;
+        }
+        .hot-articles .col-md-4:nth-child(2),.hot-articles .col-md-4:nth-child(3n+2){
+            padding-left: 3px;
+            padding-right: 3px;
+            padding-bottom: 9px;
+        }
+        .newest-magazine-section {
+            /*background: linear-gradient(45deg, rgb(0, 0, 0), rgb(200, 200, 200));*/
+            background-image: url("themes/simplebootx/Public/assets/images/magazine-bg.jpg");
+            -webkit-background-size: cover;
+            background-size: cover;
+            background-clip: border-box;
+            height: 250px;
+        }
+        .custom-magazine {
+            display: block;
+            width: 100%;
+            height: 230px;
+            background-image: url("http://ihuawen.aisimob.com:8090/data/upload/portal/20170720/597049f72e104.jpg");
+            background-clip: content-box;
+            background-repeat: no-repeat;
+            -webkit-background-size: 100%;
+            background-size: 100%;
+            -webkit-box-shadow: 10px 10px 20px rgb(128, 128, 128);
+            -moz-box-shadow: 10px 10px 20px rgb(128, 128, 128);
+            box-shadow: 10px 10px 20px rgb(128, 128, 128);
+        }
+        .custom-btn {
+            width: 100%;
+            transform: scale(0.7);
+            margin-top: 10px;
+            background-color: rgb(63, 64, 65);
+            color: #fff;
+        }
+        .custom-btn:first-child {
+            margin-top: 0;
+        }
+        .custom-ul > li {
+            text-align: center;
+        }
+
+        .more-bar {
+            width: 100%;
+            height: 30px;
+            margin: 50px 0;
+            background-color: rgb(149, 150, 152);
+            text-align: center;
+            vertical-align: top;
+            line-height: 200%;
+        }
+        .more-bar:hover {
+            cursor: pointer;
+        }
+        .more {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<tc_include file="Public:nav" />
+<div class="container" style="padding: 0;">
+
+    <php>
+        $_SESSION['is_magazine']=1;
+        $lists = sp_sql_posts_paged("where:terms.taxonomy='magazine';order:serial_number DESC;",2);
+        unset($_SESSION['is_magazine']);
+    </php>
+    <php>
+        $one = array_shift($lists['posts']);
+        $one_smeta=json_decode($one['smeta'], true);
+    </php>
+    <div style="padding-bottom: 20px;" class="newest-magazine-section">
+
+        <div class="container">
+            <div style="background-color: #beab8d;" class=" row text-center">
+
+            </div>
+
+            <div class="show-grid" style="padding-top: 20px;">
+
+                <table style="width: 100%;background: none;">
+                    <tbody>
+                    <tr>
+                        <td style="width: 20%; vertical-align: top;">
+                            <ul class="list-unstyled custom-ul">
+                                <li><h3 style="margin-top: 0; font-size: 17px; font-weight: bold;"> 最新上架 </h3></li>
+                                <li>
+                                    <span class="circle" style="background-image: url('themes/simplebootx/Public/assets/images/huawen_span.png'); transform: scale(1.6); background-position: 6px; height: 50px; width: 50px;">
+                                    </span>
+                                </li>
+                                <li>
+                                    <h3 style="font-size: 18px; padding: 20px 0 0; margin: 0; line-height: 100%;"> 第{$one['serial_number']}期 </h3>
+                                </li>
+                                <li>
+                                    <small style="color: initial;"> {:date('Y年m月d日',strtotime($one['post_date']))} </small>
+                                </li>
+                            </ul>
+                        </td>
+                        <td style="width: 20%; padding-right: 10px; overflow: hidden;">
+                            <a href="{:leuu('article/magazine_detail',array('id'=>$one['object_id'],'navid'=>$navid))}" style="">
+                                <span class="custom-magazine" />
+                            </a>
+                        </td>
+                        <td style="width: 45%; vertical-align: top;">
+                            <ul class="list-unstyled" style="border-right: 1px solid rgb(92, 92, 92); padding-right: 30px;">
+                                <li>
+                                    <span class="label label-primary" style="background-color: rgb(63, 64, 65);"> 封面专题 </span>
+                                </li>
+                                <li>
+                                    <!--<h4> {$one['post_title']} </h4>-->
+                                    <p style="padding-top: 10px; font-weight: bold; text-indent: 0px; width: inherit; word-break: break-all; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-bottom: 5px;"> {$one['post_title']} </p>
+                                </li>
+                                <li>
+                                    <h3 style="color: rgb(196, 72, 71); margin-top: 0; margin-bottom: 20px; line-height: 100%;"> 转行者小时代 </h3>
+                                </li>
+                                <li>
+                                    <!--<p style="color: initial;"> {$one['post_expert']} </p>-->
+                                    <p style="color: initial;"> 本期专题对伦敦、纽约、东京、台北以及香港等人口稠密城市的公共安全与危机应急管理体系进行了调查，试图寻找到不同城市各自的独特经验，以飨读者。《华闻周刊》本期专题对伦敦、纽约、东京、台北以及香港等人口稠密城市的公共安全与危机应急管理体系进行了调查，试图寻找到不同城市各自的独特经验，以飨读者。 </p>
+                                </li>
+                            </ul>
+                        </td>
+                        <td style="width: 15%; text-align: center; vertical-align: top;">
+                            <a href="" class="btn btn-default custom-btn"> 阅读电子报 </a>
+                            <a href="" class="btn btn-default custom-btn"> 订阅杂志 </a>
+                            <a href="" class="btn btn-default custom-btn"> 往期杂志 </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div id="container"  class="row hide" style="margin-left: 0;padding-top: 20px;">
+        <php> $article_lists = sp_sql_posts_paged("cid:$cat_id;where:terms.taxonomy='article';order:posts.post_date DESC;",20); </php>
+
+        <!--<div class="grid-sizer"></div>-->
+        <volist name="article_lists['posts']" id="vo">
+            <php>
+                $smeta=json_decode($vo['smeta'], true);
+            </php>
+            <if condition="!empty($smeta['thumb'])">
+                <tc_include file="Portal:Article:item_article_tpl" />
+            </if>
+
+        </volist>
+    </div>
+    <!-- <div class="pagination"><ul>{$lists['page']}</ul></div> -->
+    <div class="js-infinite-scroll-loading text-center" style="display: none;">正在加载...</div>
+    <div id="nextpage"></div>
+
+    <php>
+        $lists = sp_sql_posts_paged("order:post_date DESC;group:posts.id", 18);
+        //$hot_articles=sp_sql_posts("cid:$portal_hot_articles;order:post_hits desc;limit:18;where:post_title !=0");
+
+    </php>
+    <div class="row hot-articles show-grid columns" style="padding-top: 20px;">
+
+        <foreach name="lists['posts']" key="i" item="vo">
+            <php>$smeta=json_decode($vo['smeta'],true);</php>
+            <if condition="!empty($smeta['thumb'])">
+                <div class="col-sm-4">
+                    <tc_include file="Portal:Article:item_article_tpl" />
+                </div>
+            </if>
+        </foreach>
+    </div>
+
+    <section class="more-bar">
+        <span class="more"> 显示更多 </span>
+    </section>
+</div>
+<div  style="position: fixed;bottom: 0;width: 100%;">
+    <style>
+        body{
+            padding-bottom: 84px;
+        }
+    </style>
+    <tc_include file="Public:footer" />
+</div>
+<!-- JavaScript -->
+<tc_include file="Public:scripts" />
+<script src="__TMPL__Public/assets/js/imagesloaded.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/masonry.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/jquery.infiniteScroll.js"></script>
+<script>
+
+    $(function(){
+        var $container= $('#container').masonry({
+//			columnWidth : '.grid-sizer',
+            columnWidth : '.item',
+            itemSelector : '.item',
+            gutter:5
+        });
+
+        $container.imagesLoaded().progress(function (imgLoad, image) {
+            var msnry = $container.data('masonry');
+            var itemSelector = msnry.options.itemSelector;
+            var $item = $(image.img).parents(itemSelector);
+            $('.tc-gridbox',$item).css('opacity',1);
+            msnry.layout();
+        });
+
+        var _p=1;
+
+        $(".more-bar").bind('click', function () {
+
+            $.get(location.href,{p: _p+1},function (content) {
+                var $items=$(content).find('#container .item');
+                if($items.length>0){
+                    _p++;
+                    //$('.tc-gridbox',$items).css('opacity',1);
+                    $container.append( $items )
+                        // add and layout newly prepended items
+                            .masonry( 'appended', $items );
+                    $items.imagesLoaded().progress(function (imgLoad, image) {
+                        var msnry = $container.data('masonry');
+                        var itemSelector = msnry.options.itemSelector;
+                        var $item = $(image.img).parents(itemSelector);
+                        $('.tc-gridbox',$item).css('opacity',1);
+                        msnry.layout();
+                    });
+                }
+            });
+        });
+
+//        $('#nextpage').infiniteScroll({
+//            loading:'.js-infinite-scroll-loading',
+//            total_pages:parseInt("{$lists['total_pages']}"),
+//            success:function(content){
+//                var $items=$(content).find('#container .item');
+//                if($items.length>0){
+//                    //$('.tc-gridbox',$items).css('opacity',1);
+//                    $container.append( $items )
+//                    // add and layout newly prepended items
+//                        .masonry( 'appended', $items );
+//                    $items.imagesLoaded().progress(function (imgLoad, image) {
+//                        var msnry = $container.data('masonry');
+//                        var itemSelector = msnry.options.itemSelector;
+//                        var $item = $(image.img).parents(itemSelector);
+//                        $('.tc-gridbox',$item).css('opacity',1);
+//                        msnry.layout();
+//                    });
+//                }
+//            },
+//            finish:function(){
+//
+//            }
+//        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$site_name}</title>
+    <meta name="keywords" content="{$site_seo_keywords}" />
+    <meta name="description" content="{$site_seo_description}">
+    <meta name="author" content="ThinkCMF">
+    <tc_include file="Public:head" />
+    <style>
+        .modal-backdrop, .modal-backdrop.fade.in {
+            opacity: .9;
+            filter: alpha(opacity=90);
+            background-image: url("__TMPL__Public/assets/images/LoginBackground.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .modal-content {
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            height: inherit;
+        }
+        #myModal {
+            width: 480px;
+            /*height: 400px;*/
+            left:50%;
+            margin-left: -240px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            overflow: visible;
+        }
+        #myModal a {
+            text-decoration: underline;
+        }
+        #myModal .modal-header {
+            padding-top: 50px;
+        }
+        #myModal .modal-body {
+            padding: 21px 40px;
+            overflow: visible;
+            max-height: none;
+        }
+        #myModal input{
+            line-height: 26px;;
+        }
+        .modal-dialog {
+            width: inherit;
+            height: inherit;
+        }
+        @media screen and (min-width: 1200px) {
+            .span5 {
+                width: 100%;
+            }
+        }
+        @media screen and (min-width: 1200px) {
+            input.span5, textarea.span5, .uneditable-input.span5 {
+                width: 100%;
+            }
+        }
+        .span-background {
+            display: inline-block; width: 2rem;
+            height: 2rem; background-repeat: no-repeat; background-clip: content-box; background-size: contain;
+        }
+        .form-inline {
+            padding-left: 0;
+            padding-right: 0;
+            margin-bottom: 40px;
+        }
+        .form-inline>.custom-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .form-inline>.custom-group:nth-child(1) {
+            width: 70%;
+        }
+        .form-inline>.custom-group:nth-child(2) {
+            width: 28.6%;
+        }
+        .form-control{
+            height: auto;
+        }
+    </style>
+</head>
+
+<body class="body-white">
+<tc_include file="Public:nav" />
+
+<div class="container tc-main"  style="position: fixed;">
+    <div class="modal-backdrop fade in"></div>
+    <div id="myModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: block;top:22%;overflow: visible;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-center" id="gridSystemModalLabel" style="color: gray;">新会员注册</h3>
+                    <!--<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#mobile" data-toggle="tab">手机注册</a></li>
+					<li><a href="#email" data-toggle="tab">邮箱注册</a></li>
+				</ul>
+				-->
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="span5 offset4"  style="margin: 0 auto; float: inherit">
+
+                            <div class="tab-content">
+                                <div class="tab-pane" id="mobile">
+                                    <form class="form-horizontal js-ajax-form" action="{:U('user/register/doregister')}" method="post">
+
+                                        <div class="control-group">
+                                            <input type="text" name="mobile" placeholder="手机号" class="form-control">
+                                        </div>
+
+                                        <div class="control-group">
+                                            <input type="password" name="password" placeholder="密码" class="form-control">
+                                        </div>
+
+                                        <div class="control-group">
+                                            <div class="span4" style="margin-left: 0px;">
+                                                <input type="text" name="verify" placeholder="验证码" style="width:232px;">
+                                                {:sp_verifycode_img('length=4&font_size=14&width=120&height=34&charset=1234567890&use_noise=1&use_curve=0')}
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group">
+                                            <div class="span4" style="margin-left: 0px;">
+                                                <input type="text" name="mobile_verify" placeholder="手机验证码" style="width:232px;">
+                                                <a class="btn btn-success" style="width: 96px;">获取验证码</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="control-group">
+                                            <button class="btn btn-primary js-ajax-submit span4" type="submit" data-wait="1500" style="margin-left: 0px;">确定注册</button>
+                                        </div>
+
+                                        <div class="control-group" style="text-align: center;">
+                                            <p>
+                                                已有账号? <a href="{:leuu('user/login/index')}">点击此处登录</a>
+                                            </p>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane active" id="email">
+                                    <form class="form-horizontal js-ajax-form" action="{:U('user/register/doregister')}" method="post">
+
+                                        <div class="control-group" style="margin-bottom: 30px">
+                                            <input type="text" name="email" placeholder="设置常用邮箱" class="form-control">
+                                        </div>
+
+                                        <div class="control-group" style="margin-bottom: 30px">
+                                            <input type="password" name="password" placeholder="设置密码(最少6个字符, 至少包含一个字母)" class="form-control">
+                                        </div>
+
+                                        <div class="control-group" style="margin-bottom: 25px">
+                                            <input type="password" name="repassword" placeholder="确认密码" class="form-control">
+                                        </div>
+
+                                        <div class="form-inline" style="margin-bottom: 45px;">
+                                            <div class="form-group custom-group">
+                                                <input type="checkbox" name="argument" value="1" /><span style="font-size: 12px;"> 完成注册表示您已同意<a target="_blank" style="color: rgb(250, 122, 37); font-size: 12px;" href="__ROOT__/privacy.html"> 网站协议 </a></span>
+                                            </div>
+                                            <div class="form-group custom-group">
+                                                <button class="btn btn-warning js-ajax-submit" type="submit" data-wait="1500" style="background-color: rgb(250, 122, 37) ;margin-left: 0; width: 100%; padding: 5px 0;"> 提交 </button>
+                                            </div>
+                                        </div><!-- end form-inline -->
+
+                                        <div class="control-group" style="text-align: center;margin-bottom: 30px;">
+                                            <p>
+                                                已有账户? <a href="{:leuu('user/login/index')}">点击此处登录</a>
+                                            </p>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute text-left" style="bottom: -60px;color: #FFFFFF;">
+                    <p style="color: #fff; font-size: 10px; padding-top: 20px; white-space: nowrap;">如有任何问题请致电：020 8099 8888   或发送邮件致：<a href="mailto:it@thechineseweekly.com">it@thechineseweekly.com</a></p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+
+</div>
+<!-- /container -->
+<div  style="position: fixed;bottom: 0;width: 100%;">
+    <style>
+        body{
+            padding-bottom: 84px;
+        }
+    </style>
+    <tc_include file="Public:footer" />
+</div>
+
+<tc_include file="Public:scripts" />
+</body>
+</html>

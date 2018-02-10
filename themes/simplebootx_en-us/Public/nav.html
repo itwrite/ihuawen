@@ -1,0 +1,81 @@
+<style>
+	.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus{
+		background-color: #404040;
+		border: 1px solid #606060;
+		border-bottom: 0;
+	}
+	.navbar .nav>li>a{
+		padding: 15px 15px;
+		text-shadow: none;
+	}
+	.navbar .nav>li>a:hover{
+		border: 1px solid #606060;
+		border-bottom-color: transparent;
+	}
+	.nav.nav-tabs{
+		border-bottom: 0;
+		margin-top: 20px;
+	}
+	.navbar .nav .user{
+		border: 1px solid transparent;
+		border-bottom: 0;
+	}
+</style>
+{:hook('body_start')}
+<div class="navbar navbar-fixed-top" style="margin: 0;">
+   <div class="navbar-inner" style="background: #000;">
+     <div class="container">
+       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+       </a>
+       <a class="brand" href="__ROOT__/"><img src="__TMPL__Public/assets/images/logo.png"/></a>
+       <div class="nav-collapse collapse" id="main-menu">
+
+		   <ul id="myTabs" class="nav nav-tabs" role="tablist" >
+			   <foreach name="navs" key="i" item="nav">
+
+				   <li role="presentation" class="dropdown">
+					   <a href="#"  class="dropdown-toggle" data-toggle="dropdown" aria-controls="myTabDrop1-contents-{$nav.id}" aria-expanded="false">{$nav.label}</a>
+					   <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents-{$nav.id}">
+						   <li class="pull-left"><a href="#dropdown1">@fat</a></li>
+						   <li class="pull-left"><a href="#dropdown2">@mdo</a></li>
+						   <li class="clearfix"></li>
+					   </ul>
+				   </li>
+			   </foreach>
+
+		   </ul>
+		<ul class="nav pull-right" id="main-menu-user">
+
+			<li class="dropdown user login">
+	            <a class="dropdown-toggle user" data-toggle="dropdown" href="#">
+	            <img src="__TMPL__Public/assets/images/headicon.png" class="headicon"/>
+	            <span class="user-nicename"></span><b class="caret"></b></a>
+	            <ul class="dropdown-menu pull-right">
+	               <li><a href="{:U('user/center/index')}"><i class="fa fa-user"></i> &nbsp;个人中心</a></li>
+	               <li class="divider"></li>
+	               <li><a href="{:U('user/index/logout')}"><i class="fa fa-sign-out"></i> &nbsp;退出</a></li>
+	            </ul>
+          	</li>
+          	<li class="dropdown user offline">
+	            <a class="dropdown-toggle user" data-toggle="dropdown" href="#" style="border-bottom: 0;">
+	           		<img src="__TMPL__Public/assets/images/headicon.png" class="headicon"/>登录<b class="caret"></b>
+	            </a>
+	            <ul class="dropdown-menu pull-right">
+	               <li><a href="{:U('api/oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;微博登录</a></li>
+	               <li><a href="{:U('api/oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;QQ登录</a></li>
+	               <li><a href="{:leuu('user/login/index')}"><i class="fa fa-sign-in"></i> &nbsp;登录</a></li>
+	               <li class="divider"></li>
+	               <li><a href="{:leuu('user/register/index')}"><i class="fa fa-user"></i> &nbsp;注册</a></li>
+	            </ul>
+          	</li>
+		</ul>
+		<div class="pull-right">
+
+		</div>
+       </div>
+     </div>
+   </div>
+ </div>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script src="../../jquery.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../BookBlock/css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../../BookBlock/css/bookblock.css" />
+    <!-- custom demo style -->
+    <link rel="stylesheet" type="text/css" href="../../BookBlock/css/demo1.css" />
+
+
+    <script src="../../BookBlock/js/modernizr.custom.js"></script>
+
+    <script src="../../BookBlock/js/jquerypp.custom.js"></script>
+    <script src="../../BookBlock/js/jquery.bookblock.js"></script>
+
+    <!-- ======================================================================= -->
+    <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <style>
+        #bb-bookblock{
+            width:633px;
+            height:433px;
+        }
+        .bb-item{overflow: hidden;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Top Navigation -->
+    <div class="main clearfix">
+        <div class="bb-custom-wrapper">
+            <h3>Illustrations by <a href="http://dribbble.com/kevinhowdeshell">Kevin Howdeshell</a></h3>
+            <div id="bb-bookblock" class="bb-bookblock">
+                <div class="bb-item">
+                    <a href="http://drbl.in/bKVq"><img src="../../BookBlock/images/demo1/1.jpg" alt="image01"/></a>
+                </div>
+                <div class="bb-item">
+                    <a href="http://drbl.in/ciTX"><img src="../../BookBlock/images/demo1/2.jpg" alt="image02"/></a>
+                </div>
+                <div class="bb-item">
+                    <a href="http://drbl.in/cLHx"><img src="../../BookBlock/images/demo1/3.jpg" alt="image03"/></a>
+                </div>
+                <div class="bb-item">
+                    <a href="http://drbl.in/bAfn"><img src="../../BookBlock/images/demo1/4.jpg" alt="image04"/></a>
+                </div>
+                <div class="bb-item">
+                    <a href="http://drbl.in/dcbE"><img src="../../BookBlock/images/demo1/5.jpg" alt="image05"/></a>
+                </div>
+            </div>
+            <nav>
+                <a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>
+                <a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left">Previous</a>
+                <a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right">Next</a>
+                <a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>
+            </nav>
+        </div>
+    </div>
+</div><!-- /container -->
+
+<script>
+    var Page = (function() {
+        var config = {
+                    $bookBlock : $( '#bb-bookblock' ),
+                    $navNext : $( '#bb-nav-next' ),
+                    $navPrev : $( '#bb-nav-prev' ),
+                    $navFirst : $( '#bb-nav-first' ),
+                    $navLast : $( '#bb-nav-last' )
+                },
+                init = function() {
+                    config.$bookBlock.bookblock( {
+                        speed : 800,
+                        shadowSides : 0.8,
+                        shadowFlip : 0.7
+                    } );
+                    initEvents();
+                },
+                initEvents = function() {
+
+                    var $slides = config.$bookBlock.children();
+
+                    // add navigation events
+                    config.$navNext.on( 'click touchstart', function() {
+                        config.$bookBlock.bookblock( 'next' );
+                        return false;
+                    } );
+
+                    config.$navPrev.on( 'click touchstart', function() {
+                        config.$bookBlock.bookblock( 'prev' );
+                        return false;
+                    } );
+
+                    config.$navFirst.on( 'click touchstart', function() {
+                        config.$bookBlock.bookblock( 'first' );
+                        return false;
+                    } );
+
+                    config.$navLast.on( 'click touchstart', function() {
+                        config.$bookBlock.bookblock( 'last' );
+                        return false;
+                    } );
+
+                    // add swipe events
+                    $slides.on( {
+                        'swipeleft' : function( event ) {
+                            config.$bookBlock.bookblock( 'next' );
+                            return false;
+                        },
+                        'swiperight' : function( event ) {
+                            config.$bookBlock.bookblock( 'prev' );
+                            return false;
+                        }
+                    } );
+
+                    // add keyboard events
+                    $( document ).keydown( function(e) {
+                        var keyCode = e.keyCode || e.which,
+                                arrow = {
+                                    left : 37,
+                                    up : 38,
+                                    right : 39,
+                                    down : 40
+                                };
+
+                        switch (keyCode) {
+                            case arrow.left:
+                                config.$bookBlock.bookblock( 'prev' );
+                                break;
+                            case arrow.right:
+                                config.$bookBlock.bookblock( 'next' );
+                                break;
+                        }
+                    } );
+                };
+
+        return { init : init };
+
+    })();
+</script>
+<script>
+
+</script>
+
+
+<h1>PDF.js Previous/Next example</h1>
+
+<div>
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+    &nbsp; &nbsp;
+    <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+</div>
+
+<div id="demo">
+
+</div>
+<div>
+
+</div>
+<canvas style="display: none;" id="the-canvas"></canvas>
+
+<script>
+    // If absolute URL from the remote server is provided, configure the CORS
+    // header on that server.
+    var url = '//cdn.mozilla.net/pdfjs/tracemonkey.pdf';
+
+    // The workerSrc property shall be specified.
+    PDFJS.workerSrc = '../build/pdf.worker.js';
+
+    var pdfDoc = null,
+            pageNum = 1,
+            pageRendering = false,
+            pageNumPending = null,
+            scale = 1,
+            canvas = document.getElementById('the-canvas'),
+            ctx = canvas.getContext('2d');
+
+    function canvasToImage(canvas) {
+        var image = new Image();
+                image.style.width = canvas.width + 'px';
+                image.style.height = canvas.height + 'px';
+        image.src = canvas.toDataURL("image/png");
+        return image;
+    }
+    /**
+     * Get page info from document, resize canvas accordingly, and render page.
+     * @param num Page number.
+     */
+    var count_i = 1;
+    function renderPage(num,$item) {
+        pageRendering = true;
+        // Using promise to fetch the page
+        pdfDoc.getPage(num).then(function(page) {
+
+            var viewport = page.getViewport(0.5);
+            console.log(page)
+
+            var canvas = document.createElement('canvas');
+            canvas.mozOpaque = true;
+            var ctx = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Render PDF page into canvas context
+            var renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            var renderTask = page.render(renderContext);
+
+
+            // Wait for rendering to finish
+            renderTask.promise.then(function() {
+                pageRendering = false;
+
+                if (pageNumPending !== null) {
+                    // New page rendering is pending
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }else{
+                    var image = canvasToImage(canvas);
+                    var $a = $('<a></a>').attr({href:""}).append(image);
+                    $item.append($a);
+                }
+                if(page){
+                    console.log(count_i);
+                    count_i++;
+                }
+            });
+        });
+    }
+
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finised. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+
+    /**
+     * Displays previous page.
+     */
+    function onPrevPage() {
+        if (pageNum <= 1) {
+            return;
+        }
+        pageNum--;
+        queueRenderPage(pageNum);
+    }
+    document.getElementById('prev').addEventListener('click', onPrevPage);
+
+    /**
+     * Displays next page.
+     */
+    function onNextPage() {
+        if (pageNum >= pdfDoc.numPages) {
+            return;
+        }
+        pageNum++;
+        queueRenderPage(pageNum);
+    }
+    document.getElementById('next').addEventListener('click', onNextPage);
+
+
+
+    var pdfUrl = "//cdn.mozilla.net/pdfjs/tracemonkey.pdf";
+    /**
+     * Asynchronously downloads PDF.
+     */
+    PDFJS.getDocument(pdfUrl).then(function(pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        document.getElementById('page_count').textContent = pdfDoc.numPages;
+
+        var divPages = [];
+
+        var perSixe = 2;
+        var k_len = Math.ceil(pdfDoc_.numPages/perSixe);
+        for(var per_i=0;per_i<k_len;per_i++){
+
+            var _next = per_i*perSixe+1;
+            var _next_next = _next+1;
+
+
+            var $item = $('<div></div>');
+            $item.addClass('bb-item');
+
+            renderPage(_next,$item);
+            renderPage(_next_next,$item);
+
+            $("#bb-bookblock").append($item);
+        }
+        // Initial/first page rendering
+        Page.init();
+    });
+
+</script>
+</body>
+</html>

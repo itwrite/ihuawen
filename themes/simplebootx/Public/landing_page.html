@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$site_name}</title>
+    <meta name="keywords" content="{$site_seo_keywords}" />
+    <meta name="description" content="{$site_seo_description}">
+    <meta name="author" content="">
+    <tc_include file="Public:head" />
+    <style>
+        .modal-backdrop, .modal-backdrop.fade.in {
+            opacity: .9;
+            filter: alpha(opacity=90);
+            background-image: url("__TMPL__Public/assets/images/LoginBackground.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .modal-content {
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            height: inherit;
+        }
+        #myModal {
+            width: 580px;
+            /*height: 400px;*/
+            left:50%;
+            margin-left: -290px;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            overflow: visible;
+        }
+        #myModal a {
+            text-decoration: underline;
+        }
+        #myModal .modal-header {
+            padding-top: 48px;
+        }
+        #myModal .modal-body {
+            padding: 15px 40px;
+            overflow: visible;
+            max-height: none;
+        }
+        .modal-dialog {
+            width: inherit;
+            height: inherit;
+        }
+        @media screen and (min-width: 1200px) {
+            .span5 {
+                width: 100%;
+            }
+        }
+        @media screen and (min-width: 1200px) {
+            input.span5, textarea.span5, .uneditable-input.span5 {
+                width: 100%;
+            }
+        }
+        .span-background {
+            display: inline-block; width: 2rem;
+            height: 2rem; background-repeat: no-repeat; background-clip: content-box; background-size: contain;
+        }
+        .form-inline {
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .form-inline>.custom-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .form-inline>.custom-group:nth-child(1) {
+            width: 50%;
+        }
+        .form-inline>.custom-group:nth-child(2) {
+            width: 20%;
+        }
+        .form-inline>.custom-group:nth-child(3) {
+            width: 27%;
+        }
+        .control-group .inline > li{
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        #myModal .control-group .inline > li a{
+            font-size: 12px;
+            color: #666;
+            text-decoration: none;
+        }
+        #myModal input{
+            line-height: 26px;
+        }
+    </style>
+</head>
+
+<body class="body-white">
+<tc_include file="Public:nav" />
+
+<div class="container tc-main"  style="position: fixed;">
+
+    <div class="modal-backdrop fade in"></div>
+    <div id="myModal" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: block;top: 162px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content relative">
+                <img src="__TMPL__Public/assets/images/landing-page.jpg">
+                <a href="https://itunes.apple.com/cn/app/%E4%BB%8A%E6%97%A5%E5%8D%8E%E9%97%BB/id1272606001?mt=8" class="btn btn-default absolute" style="top:205px;left:150px;">下载</a>
+                <a href="https://play.google.com/store/apps/details?id=com.aisi.huawen" class="btn btn-default absolute" style="top:320px;left:150px;">下载</a>
+                <div class="text-left absolute" style="left: -40px;bottom: -50px;color:#FFFFFF;">
+                    <tc_include file="Public:contact_info" />
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+
+
+</div>
+<!-- /container -->
+<div  style="position: fixed;bottom: 0;width: 100%;">
+    <style>
+        body{
+            padding-bottom: 84px;
+        }
+    </style>
+    <tc_include file="Public:footer" />
+</div>
+
+<tc_include file="Public:scripts" />
+</body>
+</html>

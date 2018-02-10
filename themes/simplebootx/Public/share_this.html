@@ -1,0 +1,121 @@
+<div class="share-this">
+    <div class="background social-media social-media-horizontal">
+        <span class="share-item-title">Share</span>
+        <span class="st_sharethis_large item social-media-item" displaytext="ShareThis"></span>
+        <a href="javascript:void(0)" target="_blank" data-toggle="tooltip" data-tooltip="tooltip-facebook"
+           class="social-media facebook tooltip-enabled item">
+            <div class="popover right hidden" id="tooltip-facebook" >
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+                <div class="popover-content">
+                    <div class="social-media-popup-panel">
+                        <span class='st_facebook_hcount social-media-item' displayText='Facebook'></span>
+                        <span class='st_fblike_hcount  social-media-item' displayText='Facebook Like'></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="javascript:void(0)" target="_blank" data-toggle="tooltip" data-tooltip="tooltip-twitter"
+           class="social-media twitter tooltip-enabled item">
+            <div class="popover right hidden" id="tooltip-twitter" >
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+                <div class="popover-content">
+                    <div class="social-media-popup-panel">
+                        <span class='st_twitter_hcount social-media-item' displayText='Tweet' st_username='AmusingQuest'></span>
+                        <span class='st_twitterfollow_hcount social-media-item' displayText='Twitter Follow' st_username='AmusingQuest'></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="javascript:void(0)" target="_blank" data-toggle="tooltip" data-tooltip="tooltip-pinterest"
+           class="social-media pinterest tooltip-enabled item">
+            <div class="popover right hidden" id="tooltip-pinterest" >
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+                <div class="popover-content">
+                    <div class="social-media-popup-panel">
+                        <span class='st_pinterest_hcount social-media-item' displayText='Pinterest' st_username='AmusingQuest'></span>
+                        <span class='st_pinterestfollow_hcount social-media-item' displayText='Pinterest Follow'></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="javascript:void(0)" target="_blank" data-tooltip="tooltip-linkedin"
+           class="social-media linkedin tooltip-enabled item">
+            <div class="popover right hidden" id="tooltip-linkedin" >
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+                <div class="popover-content">
+                    <div class="social-media-popup-panel">
+                        <span class='st_linkedin_hcount social-media-item' displayText='LinkedIn' st_username='AmusingQuest'></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="javascript:void(0)" target="_blank" data-tooltip="tooltip-google"
+           class="social-media googleplus tooltip-enabled item">
+            <div class="popover right hidden" id="tooltip-google" >
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+
+                <div class="popover-content">
+                    <div class="social-media-popup-panel">
+                        <span class='st_googleplus_hcount social-media-item' displayText='Google +' st_username='+AmusingQuest'></span>
+                        <span class='st_plusone_hcount social-media-item' displayText='Google +1' st_username='+AmusingQuest'></span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <span class='st_email_large item social-media-item' displayText='Email'></span>
+    </div>
+</div>
+
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript" src="http://s.sharethis.com/loader.js"></script>
+<script type="text/javascript">
+    stLight.options({
+        publisher: "f1f6240a-a788-4621-87c0-e96e0941d106",
+        doNotHash: false,
+        doNotCopy: false,
+        hashAddressBar: false,
+        onhover:true
+    });
+</script>
+
+<script>
+    $(function(){
+        //sharethis
+        $(".social-media-item").each(function (index, item) {
+            if($(item).hasClass('st_facebook_hcount'))return;
+            $(item).attr("st_image", "{URLROOT}/assets/images/Balloon-Kids-1.jpg");
+            $(item).attr("st_url", window.location.href);
+            if ($(item).hasClass("st_twitter_hcount"))
+                $(item).attr("st_title", "Amusing Quest - One Simple Site for Booking Kids Party.  It’s like Expedia or Open Table for kids party. Come check it out!");
+            else
+                $(item).attr("st_title", "Kids Birthday Party Places & Entertainment – Amusing Quest");
+            var prefix = "";
+            if ($(item).hasClass("st_linkedin_hcount")) prefix = 'Amusing Quest - ';
+            $(item).attr("st_summary", "One Simple Site for Booking Kids Party.  It’s like Expedia or Open Table for kids party.  Sign up to get new ideas and tips for planning your kids' next birthday.  See cool parties that others are having.  Come check it out!");
+
+        });
+        $(".tooltip-enabled").each(function(index,item){
+            $(item).hover(function(){
+                $(".popover").hide();
+                var id= '#'+$(this).attr("data-tooltip");
+                var pos= $(this).offset();
+                $(id).show();
+                $(id).removeClass('hidden');
+                $(id).offset({top:pos.top, left:pos.left+$(this).outerWidth()});
+                $(id).hover(function(){},function(){
+                    $(this).hide();
+                });
+            },function(){
+                var id= '#'+$(this).attr("data-tooltip");
+                $(id).hide();
+            });
+        });
+
+    });
+</script>

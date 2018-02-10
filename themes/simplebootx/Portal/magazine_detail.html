@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$post_title} {$site_name} </title>
+    <meta name="keywords" content="{$post_keywords}"/>
+    <meta name="description" content="{$post_excerpt}">
+    <tc_include file="Public:head"/>
+
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/js/BookBlock/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/js/BookBlock/css/bookblock.css"/>
+    <!-- custom demo style -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/js/BookBlock/css/demo1.css"/>
+
+
+    <script src="__PUBLIC__/js/BookBlock/js/modernizr.custom.js"></script>
+
+    <script src="__PUBLIC__/js/BookBlock/js/jquerypp.custom.js"></script>
+    <script src="__PUBLIC__/js/BookBlock/js/jquery.bookblock.js"></script>
+
+
+    <script src="__PUBLIC__/js/pdfjs/build/pdf.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+            background-color: #F5F5F5;
+        }
+
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            background-color: #F5F5F5;
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 6px;
+            -webkit-box-shadow: inset 0 0 6px rgba(33, 33, 33, .3);
+            background-color: #888;
+        }
+
+        .leftside .tc-box {
+            margin-top: 0;
+        }
+    </style>
+
+    <style>
+        #article_content img {
+            height: auto !important
+        }
+
+        #article_content {
+            word-wrap: break-word;
+        }
+
+        .btn {
+            margin-top: 33px;
+        }
+
+        #bb-bookblock {
+            width: 633px;
+            height: 433px;
+        }
+
+        .bb-item {
+            overflow: auto;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .bb-custom-wrapper {
+            margin: 0;
+            width: 100%;
+        }
+
+        .bb-navs a {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            border-radius: 2px;
+            background: #72b890;
+            color: #fff;
+            font-size: 0;
+            margin: 2px;
+        }
+
+        .magazine-reader-box {
+            background: none;
+            position: relative;
+            padding: 0;
+        }
+
+        .magazine-reader-box .progress {
+            width: 633px;
+            margin: 0 auto;
+        }
+
+        .bb-custom-icon {
+            position: absolute;
+            top: 40%;
+            z-index: 222;
+        }
+
+        .btn-full-screen {
+            display: block;
+            position: absolute;
+            top: -62px;
+            right:64px;
+            z-index: 999;
+        }
+
+        .full-screen .btn-full-screen {
+            display: none;
+        }
+
+        .btn-exit-full-screen {
+            display: none;
+        }
+
+        .full-screen .btn-exit-full-screen {
+            display: block;
+            position: absolute;
+            top: -62px;
+            right:20px;
+            z-index: 999;
+        }
+
+        .full-screen > .magazine-reader-box {
+            position: fixed;
+            z-index: 9999;
+            left: 30px;
+            top: 30px;
+        }
+
+        .full-screen > .magazine-reader-box #bb-bookblock, .full-screen .magazine-reader-box .progress {
+            width: 1130px;
+        }
+
+        .magazine-reader-box-modal{
+            display: none;
+        }
+        .full-screen .magazine-reader-box-modal {
+            position: fixed;
+            z-index: 9998;
+            background: #000000;
+            opacity: .5;
+            top: 0;
+            left: 0;
+            display: block;
+        }
+    </style>
+    <script src="__TMPL__Public/assets/js/imagesloaded.pkgd.min.js"></script>
+</head>
+<body style="background-color: transparent;padding-top: 160px;">
+
+<tc_include file="Public:nav"/>
+
+<div class="container tc-main" style="margin-top: 0;">
+    <div class="row">
+        <div id="reader-box" class="span9" style="margin-left: 0px;padding: 0;width: 100%;margin-right: 1%;">
+            <div class="tc-box first-box article-box magazine-reader-box">
+                <button type="button" class="btn btn-xs btn-warning btn-full-screen">放大</button>
+                <button type="button" class="btn btn-xs btn-default btn-exit-full-screen">关闭</button>
+                <div class="progress" style="display: none;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                         style="width: 0%;"></div>
+                </div>
+                <div class="bb-custom-wrapper">
+                    <div id="bb-bookblock" class="bb-bookblock" style="overflow:auto;">
+
+                    </div>
+                </div>
+                <nav class="bb-navs">
+                    <a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left" style="left: -1px;">Previous</a>
+                </nav>
+                <nav class="bb-navs">
+                    <a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right" style="right: -1px;">Next</a>
+                </nav>
+
+                <script>
+                    var Page = (function () {
+                        var config = {
+                                    $bookBlock: $('#bb-bookblock'),
+                                    $navNext: $('#bb-nav-next'),
+                                    $navPrev: $('#bb-nav-prev')
+                                },
+                                init = function () {
+                                    config.$bookBlock.bookblock({
+                                        speed: 800,
+                                        shadowSides: 0.8,
+                                        shadowFlip: 0.7
+                                    });
+                                    initEvents();
+                                },
+                                initEvents = function () {
+
+                                    var $slides = config.$bookBlock.children();
+
+                                    // add navigation events
+                                    config.$navNext.on('click touchstart', function () {
+                                        config.$bookBlock.bookblock('next');
+                                        return false;
+                                    });
+
+                                    config.$navPrev.on('click touchstart', function () {
+                                        config.$bookBlock.bookblock('prev');
+                                        return false;
+                                    });
+
+//                                    config.$navFirst.on( 'click touchstart', function() {
+//                                        config.$bookBlock.bookblock( 'first' );
+//                                        return false;
+//                                    } );
+//
+//                                    config.$navLast.on( 'click touchstart', function() {
+//                                        config.$bookBlock.bookblock( 'last' );
+//                                        return false;
+//                                    } );
+
+                                    // add swipe events
+                                    $slides.on({
+                                        'swipeleft': function (event) {
+                                            config.$bookBlock.bookblock('next');
+                                            return false;
+                                        },
+                                        'swiperight': function (event) {
+                                            config.$bookBlock.bookblock('prev');
+                                            return false;
+                                        }
+                                    });
+
+                                    // add keyboard events
+                                    $(document).keydown(function (e) {
+                                        var keyCode = e.keyCode || e.which,
+                                                arrow = {
+                                                    left: 37,
+                                                    up: 38,
+                                                    right: 39,
+                                                    down: 40
+                                                };
+
+                                        switch (keyCode) {
+                                            case arrow.left:
+                                                config.$bookBlock.bookblock('prev');
+                                                break;
+                                            case arrow.right:
+                                                config.$bookBlock.bookblock('next');
+                                                break;
+                                        }
+                                    });
+                                };
+
+                        return {init: init};
+
+                    })();
+                    var Page2 = (function () {
+                        var config = {
+                                    $bookBlock: $('#bb-bookblock2'),
+                                    $navNext: $('#bb-nav-next2'),
+                                    $navPrev: $('#bb-nav-prev2')
+                                },
+                                init = function () {
+                                    config.$bookBlock.bookblock({
+                                        speed: 800,
+                                        shadowSides: 0.8,
+                                        shadowFlip: 0.7
+                                    });
+                                    initEvents();
+                                },
+                                initEvents = function () {
+
+                                    var $slides = config.$bookBlock.children();
+
+                                    // add navigation events
+                                    config.$navNext.on('click touchstart', function () {
+                                        config.$bookBlock.bookblock('next');
+                                        return false;
+                                    });
+
+                                    config.$navPrev.on('click touchstart', function () {
+                                        config.$bookBlock.bookblock('prev');
+                                        return false;
+                                    });
+
+//                                    config.$navFirst.on( 'click touchstart', function() {
+//                                        config.$bookBlock.bookblock( 'first' );
+//                                        return false;
+//                                    } );
+//
+//                                    config.$navLast.on( 'click touchstart', function() {
+//                                        config.$bookBlock.bookblock( 'last' );
+//                                        return false;
+//                                    } );
+
+                                    // add swipe events
+                                    $slides.on({
+                                        'swipeleft': function (event) {
+                                            config.$bookBlock.bookblock('next');
+                                            return false;
+                                        },
+                                        'swiperight': function (event) {
+                                            config.$bookBlock.bookblock('prev');
+                                            return false;
+                                        }
+                                    });
+
+                                    // add keyboard events
+                                    $(document).keydown(function (e) {
+                                        var keyCode = e.keyCode || e.which,
+                                                arrow = {
+                                                    left: 37,
+                                                    up: 38,
+                                                    right: 39,
+                                                    down: 40
+                                                };
+
+                                        switch (keyCode) {
+                                            case arrow.left:
+                                                config.$bookBlock.bookblock('prev');
+                                                break;
+                                            case arrow.right:
+                                                config.$bookBlock.bookblock('next');
+                                                break;
+                                        }
+                                    });
+                                };
+
+                        return {init: init};
+
+                    })();
+                </script>
+                <script>
+
+                    function canvasToImage(canvas) {
+                        var image = new Image();
+                        //image.style.width = canvas.width + 'px';
+                        //image.style.height = canvas.height + 'px';
+                        image.src = canvas.toDataURL("image/png");
+                        return image;
+                    }
+
+                    function getOutputScale(ctx) {
+                        var devicePixelRatio = window.devicePixelRatio || 1;
+                        var backingStoreRatio = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+                        var pixelRatio = devicePixelRatio / backingStoreRatio;
+                        return {
+                            sx: pixelRatio,
+                            sy: pixelRatio,
+                            scaled: pixelRatio !== 1
+                        };
+                    }
+                    // The workerSrc property shall be specified.
+                    //                    PDFJS.workerSrc = '../build/pdf.worker.js';
+
+                    var pdfDoc = null, scale = 1.5;
+
+
+                    var $progressbar = $(".magazine-reader-box > .progress > .progress-bar");
+                    var $progress = $(".magazine-reader-box > .progress");
+                    //
+                    var _page_count_i = 0;
+
+                    //
+                    var total_pages = 0;
+
+                    /**
+                     * Get page info from document, resize canvas accordingly, and render page.
+                     * @param num Page number.
+                     */
+                    function renderPage(num, $item) {
+                        // Using promise to fetch the page
+                        pdfDoc.getPage(num).then(function (page) {
+
+                            var viewport = page.getViewport(scale);
+//                            console.log(page)
+
+                            var canvas = document.createElement('canvas');
+                            canvas.mozOpaque = true;
+                            var ctx = canvas.getContext('2d', {alpha: false});
+                            var outputScale = getOutputScale(ctx);
+                            canvas.width = viewport.width * outputScale.sx | 0;
+                            canvas.height = viewport.height * outputScale.sy | 0;
+                            canvas.style.width = viewport.width + 'px';
+                            canvas.style.height = viewport.height + 'px';
+                            if (outputScale.scaled) {
+                                ctx.scale(outputScale.sx, outputScale.sy);
+                            }
+//                            $item.width(canvas.width*2+2);
+//                            $item.height(canvas.height);
+                            // Render PDF page into canvas context
+                            var renderContext = {
+                                canvasContext: ctx,
+                                viewport: viewport
+                            };
+                            var renderTask = page.render(renderContext);
+
+
+                            // Wait for rendering to finish
+                            renderTask.promise.then(function () {
+                                var image = canvasToImage(canvas);
+                                var k = page.pageNumber % 2;
+                                var $page_i = $('<span></span>').css({position: 'absolute','width':"50%"}).attr({'data-page': page.pageNumber}).append(image);
+                                if (k == 0) {
+                                    $page_i.css({left: "50%"});
+                                } else {
+                                    $page_i.css({right: "50%"});
+                                }
+                                $item.append($page_i);
+                                _page_count_i++;
+                                var percent = Math.ceil((_page_count_i / total_pages) * 100);
+                                console.log(_page_count_i, total_pages);
+                                $progressbar.css({width: percent + '%'});
+                                if (percent > 99) {
+                                    $progress.fadeOut();
+                                }
+                            });
+                        });
+                    }
+
+                    var pdfUrl = "{:sp_get_asset_upload_path($post_file_path)}";
+                    PDFJS.workerSrc = '__PUBLIC__/js/pdfjs/build/pdf.worker.js';
+                    /**
+                     * Asynchronously downloads PDF.
+                     */
+                    PDFJS.getDocument(pdfUrl).then(function (pdfDoc_) {
+                        pdfDoc = pdfDoc_;
+                        total_pages = pdfDoc.numPages;
+                        var perSixe = 2;
+                        var k_len = Math.ceil(pdfDoc_.numPages / perSixe);
+
+                        $progress.fadeIn();
+                        for (var per_i = 0; per_i < k_len; per_i++) {
+
+                            var _next = per_i * perSixe + 1;
+                            var _next_next = _next + 1;
+
+
+                            var $item = $('<div></div>');
+                            $item.addClass('bb-item');
+
+                            renderPage(_next, $item);
+                            renderPage(_next_next, $item);
+
+                            $("#bb-bookblock").append($item);
+                        }
+                        // Initial/first page rendering
+                        Page.init();
+                    });
+
+                </script>
+            </div>
+            <div class="magazine-reader-box-modal">
+
+            </div>
+
+            <script>
+                function fullScreen() {
+                    var win_width = $(window).width();
+                    var win_height = $(window).height();
+                    $("#reader-box").addClass('full-screen');
+                    $('.full-screen .magazine-reader-box-modal').width(win_width).height(win_height);
+
+                    $(".full-screen > .magazine-reader-box #bb-bookblock").width(win_width - 110).height(win_height - 70);
+                    $(".full-screen .magazine-reader-box .progress").width(win_width - 110);
+                }
+
+                $('.btn-exit-full-screen').click(function () {
+                    $("#reader-box").removeClass('full-screen');
+                    $("#reader-box > .magazine-reader-box #bb-bookblock").width(633).height(433);
+                    $("#reader-box .magazine-reader-box .progress").width(633);
+                });
+
+                $('.btn-full-screen').click(function () {
+                    fullScreen();
+                });
+            </script>
+
+
+            <php>$ad=sp_getad("portal_article_bottom");</php>
+            <if condition="!empty($ad)">
+                <div class="tc-box">
+                    <div class="headtitle">
+                        <h2>赞助商</h2>
+                    </div>
+                    <div>
+                        {$ad}
+                    </div>
+                </div>
+            </if>
+
+        </div>
+        <div class="span3 leftside" style="margin-left: 0px;width: 25%;display: none;">
+
+            <tc_include file="Portal:Article:hot_articles_list_tpl"/>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div style="position: fixed;bottom: 0;width: 100%;z-index: 201;">
+    <style>
+        body {
+            padding-bottom: 84px;
+        }
+    </style>
+    <tc_include file="Public:footer"/>
+</div>
+<!-- JavaScript -->
+<tc_include file="Public:scripts"/>
+</body>
+</html>

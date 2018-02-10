@@ -1,0 +1,53 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:U('AdminPostAuthor/index')}">作者管理</a></li>
+        <li><a href="{:U('AdminPostAuthor/add')}">添加作者</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form" action="{:U('AdminPostAuthor/add_post')}" method="post">
+        <div class="tabbable">
+            <fieldset>
+
+                <div class="control-group">
+                    <label class="control-label">名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" value=""><span class="form-required">*</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">头像</label>
+                    <div class="controls">
+                        <div style="text-align: left;">
+                            <input type="hidden" name="avatar" id="thumb" value="">
+                            <a href="javascript:upload_one_image('图片上传','#thumb');">
+                                <img src="__TMPL__Public/assets/images/default-thumbnail.png" id="thumb-preview" width="85" style="cursor: hand" />
+                            </a>
+                            <input type="button" class="btn btn-small" onclick="$('#thumb-preview').attr('src','__TMPL__Public/assets/images/default-thumbnail.png');$('#thumb').val('');return false;" value="取消图片">
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">简介</label>
+                    <div class="controls">
+                        <textarea name="content" rows="5" cols="57"></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+                    <div class="controls">
+                        <input type="checkbox" value="1" checked>显示
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary js-ajax-submit"type="submit">{:L('ADD')}</button>
+            <a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

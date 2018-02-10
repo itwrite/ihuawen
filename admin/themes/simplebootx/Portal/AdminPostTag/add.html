@@ -1,0 +1,35 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:U('AdminPostTag/index')}">标签管理</a></li>
+        <li class="active"><a href="{:U('AdminPostTag/add')}">添加标签</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form" action="{:U('AdminPostTag/add_post')}" method="post">
+        <div class="tabbable">
+            <fieldset>
+
+                <div class="control-group">
+                    <label class="control-label">名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" value=""><span class="form-required">*</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+                    <div class="controls">
+                        <input type="checkbox" value="1">显示
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary js-ajax-submit"type="submit">{:L('ADD')}</button>
+            <a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

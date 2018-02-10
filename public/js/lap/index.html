@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link rel="stylesheet" type="text/css" href="msky.ui.lap.all.css"/>
+<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="msky.ui.lap.all.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+// lap
+$(".lap1").lap({fit:false,collapsible:true,autoHeight:true,headers:{defaultClass:"msky-lap-header-default",hoverClass: "msky-lap-header-hover",activeClass:"msky-lap-header-active"}}).hide().show(2000);
+
+	$(".lap2").lap({fit:false,collapsible:true,autoHeight:true,autoDevelop:true});
+$("#bb").lap();
+});
+</script>
+</head>
+
+<body>
+<div></div>
+<script type="text/javascript">
+$("body>div:first").data("aa","aa");
+//$("body>div:first").removeData("bb");
+
+//alert($("body>div:first").data("bb"))
+
+</script>
+<style type="text/css">
+.asdf{background:red}
+</style>
+<!--  lap  开始-->
+<div id="lap">
+<div class="lap1" style=" width:90%; margin:20px;float:left ">
+<h3>使用指南</h3>
+<div>
+<pre>
+一、 可以是两种格式：1、外容器的子标签为li，&lt;ul&gt;&lt;li&gt;&lt;h3&gt;title1&lt;/h3&gt;&lt;div&gt;content1&lt;/div&gt;&lt;h3&gt;title2&lt;/h3&gt;&lt;div&gt;content2&lt;/div&gt;&lt;/li&gt;&lt;/ul&gt;
+                     2、除 1、 格式外，以外容器内两两为一组，一组中的第一个为头部title，第二个为内容区（如下test选项源代码）。
+二、与jquery 的效果组合事，jquery 的效果放在后面，否则达不到预期效果。如: $(".accordion2").accordion().hide().show(2000);       
+</pre>
+</div>
+<h3>参数列表：</h3>
+<div><pre>
+        fit : true,            //为真时，内容区自动填充高度，以适应外容器
+	autoHeight : false,    //fit:true时，此项恒为false;fit:false时,若外容器高度小于所有头部总高度时,此项为true,其它情况为入口值或默认值
+	autoDevelop : false,    //为真时,可展开多项,fit:true时，此项为false,其它情况为入口值或默认值
+	collapsible : false,    //为真时,展开项再次点击可关闭，反之不能关闭。
+	animationTime : 500,    //完全展开与完全关闭所需的时间，因此，值越大，速度越慢，（毫秒）
+	setSelected : 0,//初始化时展开的项，若为数字，则展开对应位置项；若为字符串，则由jquery选择器选取对应的头部项展开内容。（fit:false并且autoDevelop:false时才为多项展开）
+	headers : {//可自定义头部样式...
+		defaultClass : "msky-lap-header-default radius-top radius-bottom ",// 初始化时样式。
+		hoverClass : "msky-lap-header-hover",//鼠标在上方时样式。
+		activeClass : "msky-lap-header-active"//展开项的头部样式。
+	},
+	icons : {//可自定义图标样式...
+		closedClass : "msky-icon-triangle-1-e",//选项关闭时的图标样式。
+		openClass : "msky-icon-triangle-1-s"//
+	},
+	contents : {//可自定义内容框样式...
+		defaultClass : "msky-lap-content-default radius-bottom",//activeClass 为空时的样式。
+		activeClass : "msky-lap-content-active"// 内容展开的样式。
+	}
+
+</pre></div>
+<h3 selected="true">内容溢出时</h3>
+<div style="height:200px;"><div style="height:300px;">内容溢出时有滚动条</div></div>
+<h3>padding:3px</h3>
+<div></div>
+<div>test</div>
+<h3>asdf</h3>
+</div>
+
+<div class="lap2" style=" clear:both;margin-left:30px;; width:300px;">
+<li><h3>第二种格式</h3><div style="height:150px">每一项的区公单元为li,容器可以是任意标签。</div></li>
+<li><h3 selected='true'>被选择</h3><div style="height:250px">在对应的头部标签加属性 selected="true" 可以使该项被选中。</div></li>
+<li><h3>asdfaf</h3><div style="height:50px"></div></li>
+<li><h3>asdfaf</h3><div style="height:250px"></div></li>
+<li><h3>asdfaf</h3><div style="height:350px"></div></li>
+</div>
+</div>
+<!--  lap  结束-->
+<ul id="bb" style=" height:300px;float:right; width:300px;">
+<li><h3>asdfaf</h3><div style="height:150px"></div></li>
+<li><h3>asdfaf</h3><div style="height:250px"></div></li>
+<li><h3>asdfaf</h3><div style="height:50px"></div></li>
+<li><h3>asdfaf</h3><div style="height:250px"></div></li>
+<li><h3>asdfaf</h3><div style="height:350px"></div></li>
+</ul>
+
+</body>
+</html>

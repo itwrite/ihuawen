@@ -1,0 +1,241 @@
+<style>
+    .well {
+        padding: 10px;
+        border-radius: 0;
+    }
+
+    #has_favorites_list .btn {
+        min-width: 80px;
+        width: 80px;
+        overflow: hidden;
+        float: left;
+        color:#555;
+    }
+    .term-menus .btn{
+        margin: 2px;
+        background-color: transparent;
+        min-width: 80px;
+        text-align: left;
+        color:#555;
+    }
+
+    #has_favorites_list .btn > .glyphicon {
+        display: none;
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    #has_favorites_list .btn:hover > span {
+        display: block;
+    }
+
+    .left-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .has_favorites_list_tips{
+        color:#fa7a25;
+    }
+    #has_favorites_list .btn.btn-warning{
+        background-color:#fa7a25;
+        color:#fff;
+    }
+    .left-nav-item h4>a{
+        color:#555;
+        text-decoration: none;
+    }
+    .left-nav-item.active h4>a{
+        color:#fa7a25;
+    }
+</style>
+<div class="well well-sm left-nav-item" style="background-color: #f0f0f0;">
+    <h4>
+        <a>
+            <img class="left-icon" src="__TMPL__Public/assets/images/en_favorite_categories.png"> 我收藏的栏目</a>
+    </h4>
+    <if condition="count($favorite_terms) lt 1">
+        <p class="has_favorites_list_tips">您还没有收藏的栏目！</p>
+        <else/>
+        <p class="has_favorites_list_tips" style="display: none;">您还没有收藏的栏目！</p>
+    </if>
+
+      <span id="has_favorites_list">
+        <foreach name="favorite_terms" item="vo">
+            <a class="btn btn-default" data-id="{$vo.term_id}" data-fid="{$vo.id}"
+               style="margin: 2px;position: relative;">{$vo.name}<span
+                    class="glyphicon glyphicon-remove-sign"></span></a>
+        </foreach>
+    </span><span class="dropdown" style="margin: 2px;display: inline-block;"><php>
+    $terms = \Portal\Service\ApiService::terms("",array('status'=>array('NEQ','-1'),'taxonomy'=>'article'));
+    $terms_count = count($terms);
+</php>
+        <button type="button" class="btn btn-default" data-toggle="dropdown" data-hover="dropdown"
+                style="min-width: 80px;color:#FFF;font-size:36px;padding: 3px 12px 11px;">+
+        </button>
+        <ul class="dropdown-menu term-menus" style="min-width: 280px;background: none;padding: 0;">
+            <li style="background-color: #f9f7e6;">
+                <foreach name="terms" key="i" item="vo">
+                    <if condition="!in_array($vo['term_id'],$favorite_terms_ids)">
+                        <button type="button" class="btn btn-default" data-id="{$vo.term_id}"
+                                style="">
+                            {$vo.name}
+                        </button>
+                        <else/>
+                        <button type="button" class="btn btn-default" data-id="{$vo.term_id}"
+                                style="display: none;">
+                            {$vo.name}
+                        </button>
+                    </if>
+                </foreach>
+            </li>
+        </ul>
+    </span>
+</div>
+
+<div class="well well-sm left-nav-item" style="background-color: #f0f0f0;">
+    <h4>
+    <a id="my_articles" href="{:U('user/favorite/index')}"><img class="left-icon"
+                                                                                         src="__TMPL__Public/assets/images/en_favorite_articles.png">
+        我收藏的文章</a>
+        </h4>
+</div>
+
+<div class="well well-sm left-nav-item" style="background-color: #f0f0f0;">
+    <h4>
+    <a id="my_comments" href="{:U('comment/comment/index')}"><img class="left-icon"
+                                                                                           src="__TMPL__Public/assets/images/en_my_comments.png">
+        我的评论</a>
+        </h4>
+</div>
+<div id="T_template" style="display: none;">
+    <li style="list-style: none;padding: 5px 0;">
+        <table style="width:100%;">
+            <tbody>
+            <tr>
+                <td style="width: 120px;background-color: #f0f0f0;vertical-align: top;">
+                    <a href="#">
+                        <img src="__TMPL__Public/assets/images/default_tupian1.png" class="img-responsive" alt="英国汉语教学研究会举行第15届国际年会暨成立20周年纪念大会" style="width: 100%;height: 90px;">
+                    </a>
+                </td>
+                <td style="background-color: #f0f0f0;padding:10px;color:#555;vertical-align:top;position: relative;"></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </li>
+</div>
+<script>
+
+    /*
+    $("#my_comments").click(function(event){
+        event.preventDefault();
+        $.get("{:U('comment/comment/index')}",{}, function (contents) {
+            $(event.target).closest('.left-nav-item').addClass('active').siblings().removeClass('active');
+            $(".list-title h4").html("我的评论");
+            var $children = $(contents).find("#comments").children();
+            $("#favorites").html('').append($children);
+        });
+    });
+    /**/
+</script>
+<div class="list-group hide">
+    <a class="list-group-item" href="{:U('user/profile/edit')}"><i class="fa fa-list-alt fa-fw"></i> 修改资料</a>
+    <a class="list-group-item" href="{:U('user/profile/password')}"><i class="fa fa-lock fa-fw"></i> 修改密码</a>
+    <a class="list-group-item" href="{:U('user/profile/avatar')}"><i class="fa fa-user fa-fw"></i> 编辑头像</a>
+    <a class="list-group-item" href="{:U('user/profile/bang')}"><i class="fa fa-exchange fa-fw"></i> 绑定账号</a>
+    <a class="list-group-item" href="{:U('user/favorite/index')}"><i class="fa fa-star-o fa-fw"></i> 我的收藏</a>
+    <!--<a class="list-group-item" href="{:U('portal/user/articles')}"><i class="fa fa-file-text fa-fw"></i> 我的文章</a>-->
+    <a class="list-group-item" href="{:U('comment/comment/index')}"><i class="fa fa-comments-o fa-fw"></i> 我的评论</a>
+</div>
+<script>
+
+    var __p = 1;
+    function ajax_get_favorites(url,param,title,callback){
+        $(".list-title h4").html(title);
+        $.get(url,param, function (response) {
+            if(response.state == 'success'){
+                var href = "{:leuu('portal/article/index')}";
+                var lists = response.data['articles']['posts'];
+                for(var i=0; i< lists.length;i++){
+                    var row = lists[i];
+                    var $li = $("#T_template").children().eq(0).clone();
+                    $li.find("tr>td:first-child a").attr({href:href+"&id="+row.id});
+                    $li.find("tr>td:first-child img").attr({src:row.post_thumb});
+                    var $title = $('<div></div>').html(row.post_title);
+                    var $date2 = $('<div></div>').html(row.category+" | 发布时间："+row.post_date2).css({'font-size':12,position:"absolute",bottom:10});
+                    $li.find("tr>td:last-child").append($title).append($date2);
+                    $("#list_container").append($li);
+                }
+                if(typeof callback=='function'){
+                    callback.call(this,response);
+                }
+            }
+        });
+    }
+
+    function favorite_columns_tips(){
+        if($('#has_favorites_list').children().length>0){
+            $(".has_favorites_list_tips").hide();
+        }else{
+            $(".has_favorites_list_tips").show();
+        }
+    }
+
+    $("#has_favorites_list").on('click', '.btn', function (event) {
+        $("#list_container").html('');
+        var cid = $(this).data('id');
+        var term_name = $(this).text();
+        __p = 1;
+        var url = "{:U('MobileApi/list/index')}";
+        ajax_get_favorites(url, {p: __p, cid: cid}, term_name, function (response) {
+            $(event.target).closest('.left-nav-item').addClass('active').siblings().removeClass('active');
+            $(".list-header .more").show().find("a").attr({href: "{:U('Portal/list/index')}&id=" + cid});
+            favorite_columns_tips();
+        });
+        $(this).addClass('btn-warning').siblings().removeClass('btn-warning');
+
+    });
+
+    $(".term-menus .btn").click(function () {
+        var that = this;
+        var id = $(this).data('id');
+        $.post("{:U('user/favorite/do_favorite_terms')}", {object_id: id}, function (response) {
+            if (response.state == 'success') {
+                var $btn = $('<a></a>')
+                        .addClass('btn btn-default')
+                        .attr({type: "button"})
+                        .css({margin: 2, position: "relative"})
+                        .data('id', response.data.term.term_id)
+                        .data('fid', response.data.favorite.id)
+                        .html(response.data.term.name);
+                var $span = $('<span></span>').css({
+                    position: "absolute",
+                    top: 0,
+                    right: 0
+                }).addClass('glyphicon glyphicon-remove-sign');
+
+                $btn.append($span);
+
+                $('#has_favorites_list').append($btn);
+                favorite_columns_tips();
+                $(that).hide();
+            }
+        });
+    });
+
+    $("#has_favorites_list").on('click', '.btn>.glyphicon', function () {
+        var btn_that = this;
+        var fid = $(this).parent().data('fid');
+        var id = $(this).parent().data('id');
+        $.get("{:U('user/favorite/delete_favorite')}", {id: fid}, function (res) {
+            if (res.state == 'success') {
+                $(btn_that).parent().remove();
+                $(".term-menus .btn[data-id='" + id + "']").show();
+            }
+            favorite_columns_tips();
+        });
+    });
+</script>

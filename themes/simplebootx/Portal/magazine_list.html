@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$name} {$seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$seo_keywords}" />
+    <meta name="description" content="{$seo_description}">
+    <tc_include file="Public:head" />
+
+    <style>
+        .tc-gridbox .item-image img{
+            height: 230px;
+            width: 100%;
+        }
+        .tc-gridbox .body{
+            height:120px;
+        }
+        .show-grid table{
+            background:none;
+        }
+        [class^='post-']{
+            color: #ffffff;
+        }
+        .post-footer{
+            padding-top: 50px;
+        }
+        .post-footer .col-sm-4{
+            background: none;
+            border: 1px solid transparent;
+        }
+        .post-footer .col-sm-4 .btn{
+            width: 96%;
+        }
+        .show-grid.columns [class^="col-"] {
+            padding: 0;
+            border: 0;
+            background: transparent;
+        }
+
+        .hot-articles .col-sm-4:nth-child(3n){
+            padding-left: 6px;
+            padding-right: 0;
+            padding-bottom: 9px;
+        }
+        .hot-articles .col-sm-4:nth-child(1),.hot-articles .col-sm-4:nth-child(3n+1){
+            padding-left: 0px;
+            padding-right: 6px;
+            padding-bottom: 9px;
+        }
+        .hot-articles .col-sm-4:nth-child(2),.hot-articles .col-sm-4:nth-child(3n+2){
+            padding-left: 3px;
+            padding-right: 3px;
+            padding-bottom: 9px;
+        }
+        .magazine_list{
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid lightgrey;
+        }
+        .magazine_list td{
+            vertical-align: top;
+        }
+        .magazine_list tr>td:first-child{
+            width:100px;
+            padding: 10px;
+            background: lightgray;
+            text-align: center;
+            vertical-align: top;
+        }
+        .magazine_list [class*='col-sm-4']{
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-right: 0;
+        }
+        .show-grid [class^="col-sm-4"]{
+            border-width: 0;
+        }
+        table{
+            width: 100%;
+        }
+        .btn.btn-warning{
+            background-color: #c6a86f;
+            color:#000;
+        }
+        .btn.btn-warning:hover{
+            background-color:#cc9960 ;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+<tc_include file="Public:nav" />
+<div class="container" style="padding: 0;">
+
+    <php>
+        //print_r($_REQUEST);
+        $where_tag = intval($_REQUEST['aid'])>0?" and posts.id=".intval($_REQUEST['aid']):"";
+        $where_tag = intval($_REQUEST['serial_number'])>0?" and posts.serial_number=".intval($_REQUEST['serial_number']):$where_tag;
+
+
+        $_SESSION['is_magazine']=1;
+        $lists = sp_sql_posts_paged("cid:$cat_id;where:terms.taxonomy='magazine' and posts.post_status=1 $where_tag;order:serial_number DESC;group:posts.serial_number",20);
+        unset($_SESSION['is_magazine']);
+
+        $serial_number_list = M('Posts')->alias('p')
+        ->field('p.serial_number')
+        ->join('__TERM_RELATIONSHIPS__ tr on(p.id=tr.object_id)')
+        ->join('__TERMS__ t on(t.term_id=tr.term_id)')
+        ->where("t.taxonomy='magazine' and p.serial_number>100 and p.post_status=1")
+        ->order("p.serial_number desc")
+        ->group("p.serial_number")
+        ->limit(20)
+        ->select();
+
+        $one = array_shift($lists['posts']);
+        $one_smeta=json_decode($one['smeta'], true);
+
+        $serial_number = isset($_GET['serial_number'])?$_GET['serial_number']:(empty($one)?(empty($serial_number_list)?"":$serial_number_list[0]['serial_number']):$one['serial_number']);
+
+    </php>
+    <if condition="$one">
+        <div style="background-color: #333; padding-bottom:15px;">
+
+            <div class="container" style="margin-top: 25px;">
+                <div class="show-grid" style="padding: 25px 0 0 25px;">
+
+                    <div>
+                        <form style="margin-bottom: 25px;" action="{:u('portal/list/index',array('id'=>98,'navid'=>22))}" method="get">
+                            <!--<input type="hidden" name="g" value="portal">-->
+                            <!--<input type="hidden" name="m" value="list">-->
+                            <!--<input type="hidden" name="a" value="index">-->
+                            <!--<input type="hidden" name="id" value="98">-->
+                            <!--<input type="hidden" name="navid" value="15">-->
+                                <span style="position: relative; display: inline-block;">
+                                    <input type="text" name="serial_number" id="bhText" style="width:150px;height:26px;margin-top:1px;position:absolute;padding:6px 6px;border: 0;"  size="30" placeholder="请输入或选择期号" value="{$serial_number}">
+                                    <span style="margin-left:150px;width:25px;overflow:hidden;" >
+                                          <select  id="bh" style="width:175px;margin-left:-150px;height:28px;margin-bottom: 0;"
+                                                   onchange="document.getElementById('bhText').value=this.options[this.selectedIndex].text=='请选择...'?'':this.options[this.selectedIndex].text;$(this).closest('form').eq(0).submit();">
+                                              <!--<option value="" selected="selected">请选择...</option>-->
+                                              <foreach name="serial_number_list" item="vo">
+                                                  <if condition="$vo['serial_number'] eq $serial_number">
+                                                      <option value="{$vo.serial_number}" selected>{$vo.serial_number}</option>
+                                                      <else/>
+                                                      <option value="{$vo.serial_number}">{$vo.serial_number}</option>
+                                                  </if>
+
+                                              </foreach>
+                                          </select>
+                                   </span>
+                                </span>
+                            <button type="submit" style="display: none;"></button>
+                        </form>
+
+                    </div>
+                    <table style="width:100%;background: none;">
+                        <tbody>
+                        <tr>
+                            <td style="width:352px;padding: 0;vertical-align: top;">
+
+                                <!--{:leuu('article/magazine_detail',array('id'=>$one['object_id'],'navid'=>$navid))}-->
+                                <a href="#">
+                                    <img src="{:sp_get_asset_upload_path($one_smeta['thumb'])}" style="width: 352px;height:465px;"
+                                         class="img-responsive" alt="{$one.post_title}">
+                                </a>
+                            </td>
+                            <td style="vertical-align: top;padding: 0 30px;">
+                                <div style="height: 15px;background-image: url('__TMPL__Public/assets/images/Line-01.png')">
+
+                                </div>
+                                <table style="width:100%; color:#000;margin-top:20px;">
+                                    <tbody>
+                                    <tr>
+                                        <td width="60">
+                                        <span class="circle" style="display:table-cell;line-height: 100%;background: #c6a86f;width: 60px;height: 60px;text-align: center;vertical-align: middle;font-size: 22px;">
+                                           <b>{$one_smeta['serial_number']}</b>
+                                       </span>
+                                        </td>
+                                        <td style="color:#FFFFFF;">
+                                            &nbsp;&nbsp;<b style="color:#d2b697;">期</b> <span>{:date('Y年m月',strtotime($one['post_source_date']))}</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="post-title" style="border-bottom: 1px solid #FFFFFF;margin-top:20px;">
+                                    <h3 style="color:#FFF;">{$one['post_title']}</h3>
+                                </div>
+                                <div class="post-content" style="border-bottom: 1px solid #FFFFFF;padding:30px 0;height: 210px;width:100%;display: table; line-height: 24px;font-size: 14px;">
+                                    <div style="display: table-cell;vertical-align: middle;">
+                                        <p>
+                                            {$one['post_excerpt']}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="post-footer" style="border-bottom: 1px solid #FFFFFF;">
+                                    <div class="row text-center" style="margin-left: 0;">
+                                        <div class="col-sm-4">
+                                            <!--{:leuu('article/magazine_detail',array('id'=>$one['object_id'],'navid'=>$navid))}-->
+                                            <a target="_blank" href="http://app.ihuawen.com/" class="btn btn-warning">
+                                                阅读电子版
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a class="btn btn-warning" href="{:u('page/index',array('id'=>48943,'navid'=>22))}">
+                                                更多杂志
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <!--<a class="btn btn-warning" data-toggle="modal" data-target="#bookMagazineModal">-->
+                                                <!--杂志订阅-->
+                                            <!--</a>-->
+                                            <a target="_blank" class="btn btn-warning" href="http://app.ihuawen.com/">
+                                                杂志订阅
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div id="container"  class="row hide" style="margin-left: 0;padding-top: 20px;">
+            <!--<div class="grid-sizer"></div>-->
+            <volist name="lists['posts']" id="vo">
+                <php>
+                    $smeta=json_decode($vo['smeta'], true);
+                </php>
+                <if condition="!empty($smeta['thumb'])">
+                    <tc_include file="Portal:Article:item_magazine_tpl" />
+                </if>
+
+            </volist>
+        </div>
+        <!-- <div class="pagination"><ul>{$lists['page']}</ul></div> -->
+        <div class="js-infinite-scroll-loading text-center" style="display: none;">正在加载...</div>
+        <div id="nextpage"></div>
+
+        <div style="background-color: #FFFFFF; padding: 25px 20px 20px 20px;">
+            <style>
+                #magazinedirlist,#magazinedirlist>li{
+                    padding: 10px 0;margin: 0;list-style: none;
+                }
+                #magazinedirlist>li:not(:last-child){
+                    border-bottom: 1px solid lightgray;
+                }
+                #magazinedirlist>li>table td{
+                    padding: 0 10px;
+                }
+                .t-table{
+                    display: table;
+                    width: 100%;
+                }
+                .t-table>*{
+                    display: table-cell;
+                    width: 33.33%;
+                    padding-right: 10px;
+                    word-break: break-all;
+                }
+            </style>
+            {$one['post_content']}
+        </div>
+
+        <else/>
+        <div style="text-align: center;">
+            <style type="text/css">
+                *{ padding: 0; margin: 0; }
+                body{ background: #fff; font-family: '微软雅黑'; color: #333; font-size: 16px; }
+                .system-message{ padding: 24px 48px;text-align: center; }
+                .system-message h1{ font-size: 100px; font-weight: normal; line-height: 120px; margin-bottom: 12px; text-align: center;}
+                .system-message .jump{ padding-top: 10px}
+                .system-message .success,.system-message .error{ line-height: 1.8em; font-size: 36px }
+                .system-message .detail{ font-size: 12px; line-height: 20px; margin-top: 12px; display:none}
+            </style>
+            <h1>&gt;_&lt;</h1>
+            <br/>
+            <p class="error">该期杂志不存在！</p>
+        </div>
+    </if>
+
+</div>
+<tc_include file="Portal:Article:dialogue-of-book-magazine" />
+<div  style="position: fixed;bottom: 0;width: 100%;">
+    <style>
+        body{
+            padding-bottom: 84px;
+        }
+    </style>
+    <tc_include file="Public:footer" />
+</div>
+<!-- JavaScript -->
+<tc_include file="Public:scripts" />
+<script src="__TMPL__Public/assets/js/imagesloaded.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/masonry.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/jquery.infiniteScroll.js"></script>
+<script>
+
+    $(function(){
+        var $container= $('#container').masonry({
+//			columnWidth : '.grid-sizer',
+            columnWidth : '.item',
+            itemSelector : '.item',
+            gutter:5
+        });
+
+        $container.imagesLoaded().progress(function (imgLoad, image) {
+            var msnry = $container.data('masonry');
+            var itemSelector = msnry.options.itemSelector;
+            var $item = $(image.img).parents(itemSelector);
+            $('.tc-gridbox',$item).css('opacity',1);
+            msnry.layout();
+        });
+
+        $('#nextpage').infiniteScroll({
+            loading:'.js-infinite-scroll-loading',
+            total_pages:parseInt("{$lists['total_pages']}"),
+            success:function(content){
+                var $items=$(content).find('#container .item');
+                if($items.length>0){
+                    //$('.tc-gridbox',$items).css('opacity',1);
+                    $container.append( $items )
+                        // add and layout newly prepended items
+                            .masonry( 'appended', $items );
+                    $items.imagesLoaded().progress(function (imgLoad, image) {
+                        var msnry = $container.data('masonry');
+                        var itemSelector = msnry.options.itemSelector;
+                        var $item = $(image.img).parents(itemSelector);
+                        $('.tc-gridbox',$item).css('opacity',1);
+                        msnry.layout();
+                    });
+                }
+            },
+            finish:function(){
+
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

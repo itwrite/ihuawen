@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$name} {$seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$seo_keywords}" />
+    <meta name="description" content="{$seo_description}">
+    <tc_include file="Public:head" />
+
+    <style>
+        .tc-gridbox .item-image img{
+            height: 230px;
+            width: 100%;
+        }
+        .tc-gridbox .body{
+            height:120px;
+        }
+        .show-grid table{
+            background:none;
+        }
+        [class^='post-']{
+            color: #ffffff;
+        }
+        .post-footer{
+            padding-top: 50px;
+            font-size: 10px;
+        }
+        .post-footer .col-sm-4{
+            background: none;
+            border: 1px solid transparent;
+            padding: 7px;
+        }
+        .post-footer .btn{
+            width: 98%;
+            padding: 4px 6px;
+        }
+
+        #container .col-sm-6:nth-child(odd){
+            padding: 0px 5px 10px 0;
+        }
+        #container .col-sm-6:nth-child(even){
+            padding: 0px 0 10px 5px;
+        }
+
+         .more-bar {
+            width: 100%;
+            height: 30px;
+            margin: 50px 0;
+            background-color: rgb(149, 150, 152);
+            text-align: center;
+            vertical-align: top;
+            line-height: 200%;
+        }
+         .more-bar:hover {
+            cursor: pointer;
+        }
+         .more {
+            color: #fff;
+        }
+        .btn.btn-warning,.circle{
+            background-color: #c6a86f;
+            color:#000;
+        }
+        .btn.btn-warning:hover,.circle:hover{
+            background-color:#cc9960 ;
+            color:#fff;
+        }
+
+        .post-title h3{
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<tc_include file="Public:nav" />
+<div class="container" style="padding: 0;">
+
+    <php>
+        $_SESSION['is_magazine']=1;
+        $lists = sp_sql_posts_paged("where:terms.taxonomy='magazine';order:serial_number DESC,post_date DESC;",19);
+        unset($_SESSION['is_magazine']);
+    </php>
+    <php>
+        $one = array_shift($lists['posts']);
+        $one_smeta=json_decode($one['smeta'], true);
+    </php>
+    <div class="container">
+        <table style="width: 100%; background: #333;">
+            <tr>
+                <td rowspan="2" style="padding: 25px 0 25px 30px;width: 240px;">
+                    <a href="{:leuu('Portal/list/index',array('id'=>98,'navid'=>15,'aid'=>$one['object_id']))}">
+                        <img src="{:sp_get_asset_upload_path($one_smeta['thumb'])}" style="width: 210px;height:276px;"
+                             class="img-responsive" alt="{$one.post_title}">
+                    </a>
+                </td>
+                <td colspan="2" style="margin: 0;padding:25px 30px 0 25px;height:15px;">
+                    <div style="height: 15px;background-image: url('__TMPL__Public/assets/images/Line-01.png')">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 265px;padding-left: 25px;">
+                    <table style="width:100%; color:#000;margin-top:20px;background: none;">
+                        <tbody>
+                        <tr>
+                            <td width="50">
+                                        <span class="circle" style="display:table-cell;line-height: 100%;background: #c6a86f;width: 50px;height: 50px;text-align: center;vertical-align: middle;font-size: 20px;">
+                                           <b>{$one_smeta['serial_number']}</b>
+                                       </span>
+                            </td>
+                            <td style="color:#FFFFFF;">
+                                &nbsp;&nbsp;<b style="color:#d2b697;">期</b> <span>{:date('Y年m月',strtotime($one['post_source_date']))}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="post-title" style="margin-top:20px;">
+                        <h3 style="color:#FFF;font-size: 21px;line-height: 30px;">{$one['post_title']}</h3>
+                    </div>
+                </td>
+                <td style="position:relative;padding: 0 30px 0 25px; vertical-align: middle;color:#fff;">
+                    <p>
+                        {$one['post_excerpt']}
+                    </p>
+                    <div class="post-footer absolute" style="bottom: 20px;width:90%;">
+                        <div class="row text-center" style="margin-left: 0;">
+
+                            <div class="col-sm-4">
+                                <a class="btn btn-warning" href="{:leuu('Portal/list/index',array('id'=>98,'navid'=>15,'aid'=>$one['object_id']))}">
+                                    查看目录
+                                </a>
+                            </div>
+                            <div class="col-sm-4">
+                                <!--{:leuu('article/magazine_detail',array('id'=>$one['object_id'],'navid'=>$navid))}-->
+                                <a target="_blank" href="http://app.ihuawen.com/" class="btn btn-warning">
+                                    阅读电子版
+                                </a>
+                            </div>
+                            <div class="col-sm-4">
+                                <!--<a class="btn btn-warning" data-toggle="modal" data-target="#bookMagazineModal">-->
+                                    <!--杂志订阅-->
+                                <!--</a>-->
+                                <a target="_blank" class="btn btn-warning btn-sm" href="http://app.ihuawen.com/">
+                                    杂志订阅
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="container"  class="row" style="margin-left: 0;padding-top: 20px;position: relative;">
+        <!--<div class="grid-sizer"></div>-->
+        <foreach name="lists['posts']" item="vo">
+            <php>
+                $smeta=json_decode($vo['smeta'], true);
+                //print_r($vo);break;
+            </php>
+            <if condition="!empty($smeta['thumb'])">
+                <div class="col-sm-6">
+                    <div class="show-grid" style="padding-top: 30px;background-color: #333;margin: 0;">
+
+                        <table style="width:100%;background: none;">
+                            <tbody>
+                            <tr>
+                                <td style="width:220px;padding: 10px 15px;vertical-align: top;height: 288px;">
+                                    <!--{:leuu('article/magazine_detail',array('id'=>$vo['object_id'],'navid'=>$navid))}-->
+                                    <a href="{:leuu('Portal/list/index',array('id'=>98,'navid'=>15,'aid'=>$vo['object_id']))}">
+                                        <img src="{:sp_get_asset_upload_path($smeta['thumb'])}" style="width: 100%;border-radius: 2px;"
+                                             class="img-responsive" alt="{$vo.post_title}">
+                                    </a>
+                                </td>
+                                <td class="relative" style="vertical-align: top;padding: 10px 15px 10px 0;">
+                                    <table style="width:100%; color:#000;">
+                                        <tbody>
+                                        <tr>
+                                            <td width="40">
+                                        <span class="circle" style="display:table-cell;line-height: 100%;width: 40px;height: 40px;text-align: center;vertical-align: middle;font-size: 16px;">
+                                           <b>{$smeta['serial_number']}</b>
+                                       </span>
+                                            </td>
+                                            <td style="color:#FFFFFF;">
+
+                                                &nbsp;&nbsp;<b style="color:#d2b697;">期</b> <span>{:date('Y年m月',strtotime($vo['post_source_date']))}</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="post-title" style="border-bottom: 1px solid #FFFFFF;font-size: 18px;">
+                                        <h3 style="color:#FFF;">{$vo['post_title']}</h3>
+                                    </div>
+                                    <div class="post-content" style="border-bottom: 1px solid #FFFFFF;padding:0;height: 30px;display: table-cell;vertical-align: middle;font-size: 14px;line-height: 24px;">
+                                        <p>
+                                            {$vo.post_excerpt|msubstr=0,60}
+                                        </p>
+                                    </div>
+                                    <div class="post-footer absolute" style="padding-top: 0;bottom:27px;width: 100%;left:0;padding:0 14px 0 0;">
+                                        <div class="row text-center" style="margin-left: 0;display: table;width:100%;">
+                                            <div style="display: table-cell;width: 33.33%;padding-right:2px;">
+                                                <a href="{:leuu('Portal/list/index',array('id'=>98,'navid'=>15,'aid'=>$vo['object_id']))}" class="btn btn-warning btn-sm">
+                                                    本期目录
+                                                </a>
+                                            </div>
+                                            <div style="display: table-cell;width: 33.34%;padding: 0 2px;">
+                                                <!--http://ihuawen.aisimob.com:8090/index.php?m=page&a=index&id=48943&navid=22-->
+                                                <a target="_blank" href="http://app.ihuawen.com/" class="btn btn-warning btn-sm">
+                                                    阅读电子版
+                                                </a>
+                                            </div>
+                                            <div style="display: table-cell;width: 33.33%;padding-left: 2px;">
+                                                <!--<a class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#bookMagazineModal">-->
+                                                    <!--订阅杂志-->
+                                                <!--</a>-->
+                                                <a target="_blank" class="btn btn-warning btn-sm" href="http://app.ihuawen.com/">
+                                                    杂志订阅
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </if>
+
+        </foreach>
+    </div>
+    <!-- <div class="pagination"><ul>{$lists['page']}</ul></div> -->
+    <div class="js-infinite-scroll-loading text-center" style="display: none;">正在加载...</div>
+    <div id="nextpage" class="btn btn-default" style="display: none"></div>
+    <if condition="$lists['total_pages'] lt 1">
+        <div class="more-bar">
+            <span class="more"> 显示更多 </span>
+        </div>
+    </if>
+
+</div>
+
+
+<tc_include file="Portal:Article:dialogue-of-book-magazine" />
+
+<tc_include file="Public:footer2" />
+<!-- JavaScript -->
+<tc_include file="Public:scripts" />
+<script src="__TMPL__Public/assets/js/imagesloaded.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/masonry.pkgd.min.js"></script>
+<script src="__TMPL__Public/assets/js/jquery.infiniteScroll.js"></script>
+<script>
+
+    $(function(){
+        var $container= $('#container');
+        var _p=1;
+        $(".more-bar").bind('click', function () {
+
+            $.get(location.href,{p: _p+1},function (content) {
+                var $items=$(content).find('#container>.col-sm-6');
+                if($items.length>0){
+                    _p++;
+                    //$('.tc-gridbox',$items).css('opacity',1);
+                    $container.append( $items );
+                }
+            });
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

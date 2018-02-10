@@ -1,0 +1,396 @@
+<style>
+    .do-post-comment-box {
+        background-color: rgb(254, 255, 255);
+        padding: 0 20px 40px;
+    }
+    .circle-btn-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 40px 0;
+    }
+    .comment-circle {
+        width: 4em;
+        height: 4em;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+        border: 1px solid rgb(178, 179, 180);
+        text-align: center;
+        vertical-align: top;
+        line-height: 350%;
+        color: #fff;
+        background-color: rgb(178, 179, 180);
+    }
+    .comment-circle:hover {
+        background-color: rgb(235, 129, 62);
+    }
+    .comment-circle > .type-name {
+        display: block;
+        margin-top: -3em;
+    }
+    .headicon {
+        margin: 0 5px;
+        height: 20px;
+        vertical-align: middle;
+    }
+    .user-info-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .emoji {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background-image: url("__TMPL__Public/assets/images/emoji.png");
+    }
+    .tags-td-wrapper {
+        width: 20%;
+    }
+    .tags-td-wrapper span {
+        display: inline-block;
+    }
+    .comment-header {
+        padding-top: 50px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+    .comment-header > section > span {
+        cursor: pointer;
+    }
+    .comment-header-tab-active {
+        color: rgb(235, 129, 62);
+    }
+    .comments-list {
+        border-top: 1px solid rgb(146, 146, 146);
+        border-bottom: 1px solid rgb(146, 146, 146);
+        padding: 30px 20px;
+    }
+    .comments-list a.pull-left:hover {
+        text-decoration: none;
+    }
+    .media-list .media-object .avatar, .nicename {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .avatar {
+        width: 50px;
+        height: auto;
+    }
+    .media-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .media-footer a {
+        margin-left: 2em;
+    }
+    .comment-circle:hover {
+        cursor: pointer;
+    }
+    .circle-btn-wrapper a:hover {
+        text-decoration: none;
+    }
+</style>
+<script src="__PUBLIC__/js/cookie.js"></script>
+<script>
+    function succeedAlert(selector, tip) {
+        selector.removeClass('alert-success').removeClass('alert-warning').addClass('alert-success').text(tip).fadeIn(3000)
+            .queue(function () {
+                selector.fadeOut(3000).dequeue();
+            });
+    }
+    function failedAlert(selector, tip) {
+        selector.removeClass('alert-success').removeClass('alert-warning').addClass('alert-warning').text(tip).fadeIn(3000)
+            .queue(function () {
+                selector.fadeOut(3000).dequeue();
+            });
+    }
+    $(document).ready(function() {
+        var $bundle;
+        $bundle = (function() {
+            var setCookie = function (cname,cvalue,exdays)
+            {
+                var d = new Date();
+                d.setTime(d.getTime()+(exdays*24*60*60*1000));
+                var expires = "expires="+d.toGMTString();
+                document.cookie = cname + "=" + cvalue + "; " + expires;
+            }
+            var getCookie = function (cname)
+            {
+                var name = cname + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0; i<ca.length; i++)
+                {
+                    var c = ca[i].trim();
+                    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+                }
+                return "";
+            }
+            return { 'setCookie': setCookie , 'getCookie': getCookie };
+        }) ();
+        $(".comment-header section").children("span").bind('click', function () {
+            $(this).siblings().removeClass('comment-header-tab-active');
+            $(this).addClass('comment-header-tab-active');
+            console.log($bundle.setCookie('comment_sort_by', $(this).data('sort')));
+            console.log('get sort', $bundle.getCookie());
+//            window.location.reload();
+        });
+        $(".j-comment").bind('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $("textarea[name='content']").focus();
+        });
+        $(".comment-footer").find("a:has('.fa-thumbs-up')").bind('click', function (event) {
+            event.preventDefault();
+            var that = this;
+            var _id = $(this).data('id');
+            $.ajax({
+                url: "{:U('Comment/Comment/do_like')}",
+                method: 'POST',
+                type: 'json',
+                data: {id: _id},
+                success: function(response) {
+                    if ('success' === response.state) {
+                        return succeedAlert($(that).siblings("div.alert"), response.info);
+                    }
+                    return failedAlert($(that).siblings("div.alert"), response.info);
+                },
+                error: function (err) {
+                    return failedAlert($(that).siblings("div.alert"), '网络错误');
+                }
+            });
+        });
+        $(".comment-footer").find("a:has('.fa-thumbs-down')").bind('click', function (event) {
+            event.preventDefault();
+            var that = this;
+            var _id = $(this).data('id');
+            if (!"{:sp_user_is_login}") {
+                return window.location.href("{:leuu('user/login/index')}");
+            }
+            console.log('收藏');
+            $.ajax({
+                url: "{:U('Comment/Comment/do_dislike')}",
+                method: 'POST',
+                type: 'json',
+                data: {id: _id},
+                success: function(response) {
+                    console.log(response);
+                    if ('success' === response.state) {
+                        return succeedAlert($(that).siblings("div.alert"), response.info);
+                    }
+                    return failedAlert($(that).siblings("div.alert"), response.info);
+                },
+                error: function (err) {
+                    return failedAlert($(that).siblings("div.alert"), '网络错误');
+                }
+            });
+        });
+    });
+</script>
+<php> $is_login = sp_is_user_login(); $user_name = sp_get_current_user(); </php>
+<div class="comment-area" id="comments">
+        <hr>
+    <div class="do-post-comment-box">
+        <div class="circle-btn-wrapper">
+            <a href="{:U('article/do_like',array('id'=>$post_id))}" class="js-count-btn">
+                <section class="comment-circle">
+                    <span class="fa fa-thumbs-o-up comment-icon"></span>
+                    <small class="type-name"> 赞 </small>
+                </section>
+            </a>
+            <a href="{:U('user/favorite/do_favorite',array('id'=>$post_id))}" class="js-favorite-btn" data-title="{$post_title}" data-url="{:U('portal/article/index',array('id'=>$post_id,'cid'=>$term_id))}" data-key="{:sp_get_favorite_key('posts',$post_id)}">
+                <section class="comment-circle">
+                    <span class="fa fa-heart-o comment-icon"></span>
+                    <small class="type-name"> 收藏 </small>
+                </section>
+            </a>
+            <span class="dropdown">
+                <section data-role="button" class="comment-circle j-share-btn" data-toggle="dropdown"  data-hover="dropdown" style="margin: 0 auto;">
+                    <span class="fa fa-share-alt comment-icon"></span>
+                    <small class="type-name"> 转发 </small>
+                </section>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" onclick="javascript:this.href ='https://plus.google.com/share?url='+ encodeURI(location.href);window.open(this.href,
+  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="fa fa-google-plus"></i> 分享到&nbsp; google</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a target="_blank"
+                           onclick="javascript:window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title), 'newWindow', 'width=800, height=400','center');void(0);">
+                           <i class="fa fa-facebook"></i> 分享到&nbsp; facebook
+                        </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#"
+                           onclick="javascript:window.open('http://v.t.sina.com.cn/share/share.php?appkey={:C('THINK_SDK_SINA.APP_KEY')}&amp;url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title)+'&amp;sourceUrl='+encodeURIComponent(location.url), 'newWindow', 'width=800, height=400','center');void(0);">
+                           <i class="fa fa-weibo"></i> 分享到&nbsp; 新浪微博
+                        </a>
+                    </li>
+                </ul>
+            </span>
+            <section class="comment-circle">
+                <span class="fa fa-comments-o comment-icon"></span>
+                <small class="type-name j-comment"> 评论 </small>
+            </section>
+        </div>
+        <div class="user-info-box">
+            <if condition="!sp_is_user_login()">
+                <section>
+                    <img src="__TMPL__Public/assets/images/svg-icons/sign_in.svg" class="headicon"/>
+                    <span>未登录用户</span>
+                </section>
+                <p> 发表评论, 请<a href="{:leuu('user/login/index')}">登录</a> </p>
+            </if>
+        </div>
+        <form method="post" id="comment-post" class="form-inline comment-form" role="form" action="{:U('comment/comment/post')}"
+              style="margin: 0;">
+            <div class="from-group">
+                <textarea name="content" placeholder="write your comment here" value="" cols="30" rows="3" class="form-control" style="width: 100%;"></textarea>
+            </div>
+            <div class="from-group text-right" style="margin-top: 20px;">
+                <span class="emoji"></span>
+                <button class="btn btn-default" type="submit" style="vertical-align: top; background-color: #fff; color: rgb(235, 129, 62); margin-top: 0; border: 1px solid rgb(194, 194, 194); -webkit-border-radius: 5px ;-moz-border-radius:5px ;border-radius: 5px;"> 发表评论 </button>
+            </div>
+            <input type="hidden" name="post_title" value="{$params.post_title}"/>
+            <input type="hidden" name="post_table" value="{$post_table}"/>
+            <input type="hidden" name="post_id" value="{$post_id}"/>
+            <input type="hidden" name="to_uid" value="0"/>
+            <input type="hidden" name="parentid" value="0"/>
+        </form>
+    </div><!-- end do-post-comment-box -->
+    <script>
+        $("#comment-post").submit(function (event) {
+            event.preventDefault();
+            var data = $(this).serialize();
+            $.ajax({
+                url: $(this).attr('action'),
+                data: data,
+                type: 'json',
+                method: 'POST',
+                success: function(response) {
+                    location.href = location.pathname + location.search;
+                },
+                error: function (err) {
+                    console.warn(err);
+                }
+            });
+            return false;
+        });
+    </script>
+
+    <div class="comment-header">
+        <span> {$comments|count}条评论 </span>
+        <section>
+            <span class="comment-header-tab-active" data-sort="newest">最新</span>
+            <span data-sort="oldest"> 最早 </span>
+            <span data-sort="hottest"> 最热 </span>
+        </section>
+    </div>
+
+        <div class="comment-tpl hide">
+            <div class="comment" data-username="{$user.user_nicename}" data-uid="{$user.id}">
+                <a class="pull-left" href="{:U('user/index/index',array('id'=>$user['id']))}">
+                    <img class="media-object avatar" src="{:U('user/public/avatar',array('id'=>$user['id']))}"
+                         class="headicon"/>
+                </a>
+
+                <div class="comment-body">
+                    <div class="comment-content"><a href="{:U('user/index/index',array('id'=>$user['id']))}">{$user.user_nicename}</a>:<span
+                            class="content"></span></div>
+                    <div><span class="time">刚刚</span> <a onclick="comment_reply(this);" href="javascript:;"><i
+                            class="fa fa-comment"></i></a></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="comment-reply-box-tpl hide">
+            <div class="comment-reply-submit">
+                <div class="comment-reply-box input-group">
+                    <input type="text" class="textbox" placeholder="回复">
+                    <span class="input-group-btn" style="width: 25%;">
+                        <button class="btn btn-default pull-right" onclick="$(this).closest('.comment-reply-submit').hide().next('.comment-footer').show();" style="margin-top: 0; z-index: initial;"> 取消 </button>
+                        <button class="btn btn-primary pull-right" onclick="comment_submit(this);" style="margin-top: 0; z-index: initial;">回复</button>
+                    </span>
+                </div><!-- reply-box -->
+            </div><!-- end reply-submit -->
+        </div>
+
+
+        <ul class="comments media-list comments-list">
+
+            <foreach name="comments" item="vo">
+                <li class="media comment" data-id="{$vo.id}" data-uid="{$vo.uid}" data-username="{$vo.full_name}"
+                     id="comment{$vo.id}" style="border-bottom: 1px dashed #ddd;">
+                    <a class="pull-left" href="{:U('user/index/index',array('id'=>$vo['uid']))}">
+                        <section class="media-object">
+                            <img class="avatar" src="{:U('user/public/avatar',array('id'=>$vo['uid']))}" />
+                            <span class="nicename">{$vo.full_name}</span>
+                        </section>
+                    </a>
+
+                    <div class="media-body comment-body">
+                        <h4 class="media-heading">
+                            <span>{$vo.content}</span>
+                            <span class="time">{:date('m月d日  H:i',strtotime($vo['createtime']))}</span>
+                        </h4>
+                        <if condition="!empty($vo['children'])">
+                            <foreach name="vo.children" item="voo">
+                                <div class="media" data-id="{$voo.id}" data-uid="{$voo.uid}"
+                                     data-username="{$voo.full_name}" id="comment{$voo.id}">
+                                    <a class="pull-left" href="{:U('user/index/index',array('id'=>$voo['uid']))}">
+                                        <section class="media-object">
+                                            <img class="avatar" src="{:U('user/public/avatar',array('id'=>$voo['uid']))}" />
+                                            <span class="nicename">{$voo.full_name}</span>
+                                        </section>
+                                        <img class="media-object avatar hide"
+                                             src="{:U('user/public/avatar',array('id'=>$voo['uid']))}"
+                                             class="headicon"/>
+                                    </a>
+
+                                    <h4 class="media-heading">
+                                        <span>{$voo.content}</span>
+                                        <span class="time">{:date('m月d日  H:i',strtotime($voo['createtime']))}</span>
+                                    </h4>
+                                    <div class="media-footer hide">
+                                        <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-pencil"> 回复 </i></a>
+                                        <a href="#" class="js-comment-dolike"><i class="fa fa-thumbs-up"> 赞 </i></a>
+                                        <a href="#" class="js-comment-dislike"><i class="fa fa-thumbs-down"> 踩 </i></a>
+                                        <a href="#"><i class="fa fa-user-secret"> 举报 </i></a>
+                                    </div>
+                                    <div class="comment-body hide">
+                                        <div class="comment-content"><a
+                                                href="{:U('user/index/index',array('id'=>$voo['uid']))}">{$voo.full_name}</a>:<span>回复 <a
+                                                href="{:U('user/index/index',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['full_name']}</a> {$voo.content}</span>
+                                        </div>
+                                        <div><span
+                                                class="time">{:date('m月d日  H:i',strtotime($voo['createtime']))}</span>
+                                            <a onclick="comment_reply(this);" href="javascript:;"><i
+                                                    class="fa fa-comment"></i></a></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </foreach>
+                        </if>
+                        <div class="media-footer comment-footer">
+                            <div class="alert" style="display: none;">
+                                <a href="#" class="alert-link">成功！很好地完成了提交。</a>
+                            </div>
+                            <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-pencil"> 回复 </i></a>
+                            <a href="#" data-id="{$vo.id}"><i class="fa fa-thumbs-up"> 赞 </i></a>
+                            <a href="#" data-id="{$vo.id}"><i class="fa fa-thumbs-down"> 踩 </i></a>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            </foreach>
+
+        </ul>
+</div>

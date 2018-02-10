@@ -1,0 +1,69 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>广播</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form" action="{:U('AdminNotification/broadcast_post')}" enctype="multipart/form-data">
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label">广播对象</label>
+                <div class="controls">
+                    <select id="broadcast_type" name="broadcast_type">
+                        <option value="allusers">所有用户</option>
+                        <option value="particularuser">指定用户</option>
+                    </select>
+                    <input id="user_id" type="text" name="user_id" placeholder="请输入用户的ID" style="display: none;">
+                    <script>
+                        $("#broadcast_type").change(function(){
+                            if($(this).val()=='particularuser'){
+                                $("#user_id").attr('disabled',false).show();
+                            }else{
+                                $("#user_id").attr('disabled',true).hide();
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">图标</label>
+                <div class="controls">
+                    <select id="notify_icon_select">
+                        <option value="normal">logo</option>
+                        <option value="particularthumb">上传图片</option>
+                    </select>
+                    <input type="file" id="icon_file" name="thumb_file" style="display: none;">
+                    <button id="notify_icon_btn" type="button" class="btn btn-default" onclick="$('#icon_file').click();" style="display: none;">选择文件</button>
+                    <span id="notify_icon_message"></span><br/><br/>
+                    <script>
+                        $("#notify_icon_select").change(function(){
+                            if($(this).val()=='particularthumb'){
+                                $("#notify_icon_btn").show();
+                            }else{
+                                $("#notify_icon_btn").hide();
+                            }
+                        });
+                        $("#icon_file").change(function () {
+                            $('#notify_icon_message').html($(this).val());
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">广播内容</label>
+                <div class="controls">
+                    <textarea name="broadcast_content"></textarea>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary js-ajax-submit">发送</button>
+            <a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+        </div>
+    </form>
+</div>
+<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

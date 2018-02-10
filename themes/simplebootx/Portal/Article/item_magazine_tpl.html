@@ -1,0 +1,23 @@
+<style>
+    .magazine-cover{
+        border: 1px solid #dddddd;
+        border-radius: 4px;
+        padding: 5px;
+    }
+    .magazine-cover:hover{
+        border-color: #335bcc;
+    }
+</style>
+<div class="col-sm-3">
+    <div class="magazine-cover">
+        <!--{:leuu('article/magazine_detail',array('id'=>$vo['object_id'],'navid'=>$navid))}-->
+        <a href="{:u('portal/article/landing_page')}">
+            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}" style="width: 100%;height: 320px;"
+                 class="img-responsive" alt="{$vo.post_title}">
+        </a>
+    </div>
+    <div style="font-size: 90%;text-align:justify;
+     text-align-last:justify;">
+        <span>第<b style="color:#d2b697;">{:intval($smeta['serial_number'])}</b>期&nbsp;发布时间：{$vo['post_date']}</span>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<style>
+	.about-ul li{
+		border-bottom:1px #999 dotted;
+	}
+
+	#footer{
+		border-top:1px #999 dotted;
+		margin:0;
+		text-align:center;
+		background-color: #FFFFFF;
+	}
+
+	#footer .about-ul li{
+		float:left;
+		border:0px;
+		margin:0 10px;
+	}
+
+	#footer table td{
+		padding: 10px;
+	}
+
+	.row{
+		margin-right: auto;
+	}
+
+</style>
+<!-- Footer ================================================== -->
+{:hook('footer')}
+<div class="row" id="footer">
+	<div class="container">
+		<div class="sub-container">
+
+			<table style="width: 100%;background-color: transparent;">
+				<tbody>
+				<tr>
+					<td class="text-left" style="padding-left: 0;">
+						<img src="__TMPL__Public/assets/images/bottom_logo.png" style="height: 36px;">
+					</td>
+					<td class="text-left hide">
+						<div style="border-left: 1px solid #BBB5B5;padding-left: 10px;">
+							<img src="__TMPL__Public/assets/images/bottom_Chinese_Weekly.png" style="height: 36px;"><br/>
+						</div>
+					</td>
+					<td style="text-align: right;">
+						今日华闻版权所有 未经许可不得转载 © ihuawen.com 2010-2015
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="backtotop">
+	<i class="fa fa-arrow-circle-up"></i>
+</div>
+{$site_tongji}

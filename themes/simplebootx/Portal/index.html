@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{$site_seo_title}</title>
+    <meta name="keywords" content="{$site_seo_keywords}"/>
+    <meta name="description" content="{$site_seo_description}">
+    <tc_include file="Public:head"/>
+
+    <tc_include file="Public:scripts"/>
+
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/js/flexslider/flexslider.css"/>
+    <script type="text/javascript" src="__PUBLIC__/js/flexslider/jquery.flexslider-min.js"></script>
+    <script type="text/javascript">
+        var $ = $.noConflict();
+        $(function () {
+            $(".flexslider.home").flexslider();
+            $(".flexslider.carousel").flexslider({
+                animation: "slide",
+                animationLoop: false,
+                itemWidth: 158,
+                itemMargin: 0,
+                minItems: 2,
+                maxItems: 5,
+                controlNav: false,
+                directionNav:true,
+                customDirectionNav: $(".custom-navigation a")
+                // pausePlay: true
+            });
+        });
+    </script>
+    <script>
+        function resetTboxMaxHeight(selector){
+            $(selector).each(function (j, m) {
+                var maxH = 0;
+                var $tbody = null;
+                var str_len = 0;
+                $(m).find(".tc-gridbox").each(function (i, n) {
+                    var h = $(n).find('.body').height();
+                    var s_len = String($(n).find('.body').text()).length;
+                    if(s_len>str_len){
+                        maxH = h;
+//                        $tbody = $(n).find('.body').css({height:maxH+10});
+                    }
+//                        maxH = Math.max(maxH,h);
+                });
+                if($tbody!==null){
+                    $tbody.closest('.tc-gridbox').parent().siblings().find('.body').height(maxH+10);
+                }
+            });
+        }
+        $(function () {
+            resetTboxMaxHeight('.show-grid');
+            $(window).resize(function () {
+                resetTboxMaxHeight('.show-grid');
+            });
+        });
+    </script>
+    <script>
+        var _____slideIndex = 1;
+
+        function plusFlip(n) {
+            showFlips(_____slideIndex += n);
+        }
+        function prevFlip() {
+            plusFlip(-1);
+        }
+        function nextFlip() {
+            plusFlip(1);
+        }
+        function currentFlip(n) {
+            showFlips(_____slideIndex=n);
+        }
+
+        function showFlips(n) {
+            var i;
+            var items = document.getElementsByClassName("flips-item");
+
+            if(items.length>0){
+                if (n > items.length) {_____slideIndex = 1}
+                if (n < 1) {_____slideIndex = items.length}
+                items[_____slideIndex-1].style.display = "block";
+//                items[_____slideIndex-1].style.position = "relative";
+                var items_siblings = siblings(items[_____slideIndex-1]);
+                for (i = 0; i < items_siblings.length; i++) {
+                    items_siblings[i].style.display = "none";
+//                    items_siblings[i].style.position = "relative";
+                }
+            }
+        }
+
+        //获取同一树层的兄弟节点
+        function siblings( elem ){
+            var r = [];
+            var n = elem.parentNode.firstChild;
+            for ( ; n; n = n.nextSibling ) {
+                if ( n.nodeType === 1 && n !== elem ) {
+                    r.push( n );
+                }
+            }
+            return r;
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+
+//            $(".flexslider").bind('mouseover', function () {
+//                $("ul.flex-direction-nav").find("a").css('opacity', 0);
+//            });
+            $("span.custom-navigation:eq(0)").bind('click', function (event) {
+                event.preventDefault();
+                $("ul.flex-direction-nav").find("a.flex-prev").trigger('click');
+            });
+            $("span.custom-navigation:eq(1)").bind('click', function (event) {
+                event.preventDefault();
+                $("ul.flex-direction-nav").find("a.flex-next").trigger('click');
+            });
+
+             /**/
+        });
+    </script>
+    <style>
+        .initial-font {
+            color: #222 !important;
+        }
+        .tag {
+            background: #fff; border:1px solid black; border-radius: 3px; color: #222 !important;
+            font-size: 12px;
+            padding: 0 3px;
+        }
+        .blue-tag {
+            background: rgb(48, 166, 192); border:1px solid #fff; border-radius: 3px; color: #fff !important;
+        }
+        .black-tag {
+            padding: 2px 5px;
+            background: #000; border-radius: 3px; color: #fff !important;
+            color: #fff;
+            font-size: 12px;
+        }
+        .tag-group {
+            text-indent: 0;
+            text-align: left;
+            margin-left: 12px;
+            margin-bottom: 5px;
+        }
+        .inner-black-tag {
+            padding: 2px 5px;
+            background-color: rgb(88, 89, 91);
+            color: #fff;
+        }
+        .inner-white-tag {
+            padding: 1px 5px;
+            background-color: #fff;
+            border: 1px solid rgb(88, 89, 91);
+        }
+        .caption-wraper{
+            position: absolute;left:0;width: 100%;}
+        .caption-wraper .caption{
+            position: relative;left:0;
+            background-color: rgba(0, 0, 0, 0.24);
+            padding: 0.4em 0em;
+            color:#fff;
+            -webkit-border-radius: 0em;
+            -moz-border-radius: 0em;
+            -ms-border-radius: 0em;
+            -o-border-radius: 0em;
+            border-radius: 0em;
+        }
+        .caption-wraper .caption table,.caption-wraper .caption td{
+            color: #FFFFFF;
+            background: none;
+        }
+        .caption-wraper .caption h4,.caption-wraper .caption h6{
+            color: #ffffff;
+        }
+
+        @media (max-width: 767px) {
+            .caption-wraper{left:0;bottom: 0.4em;}
+            .caption-wraper .caption{
+                left: 0;
+                padding: 0.2em 0em;
+                font-size: 0.92em;
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                -ms-border-radius: 0;
+                -o-border-radius: 0;
+                border-radius: 0;
+            }
+
+        }
+        .rotate_list tr>td:first-child,.rotate_list tr>td:last-child{
+            width: 26px;
+            background-color: #FFFFFF;
+        }
+        .rotate_list tr>td:nth-child(2) .flexslider{
+            width: 890px;
+        }
+
+        .rightpart .tc-gridbox {
+            border: 0;
+        }
+
+        .rightpart .tc-gridbox .item-image img {
+            height: 132px;
+            width: auto;
+            max-width: none;
+            margin: 0;
+        }
+
+        .rightpart .tc-gridbox .header h3 {
+            color: #454a4e;
+            margin: 0 5px;
+            font-size: 16px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: 21px;
+        }
+
+        .rightpart .tc-gridbox .header h3 a,
+        .rightpart .tc-gridbox .header h3 a:focus,
+        .rightpart .tc-gridbox .header h3 a {
+            white-space: nowrap;
+        }
+        .rightpart .tc-gridbox .header h3:hover{
+            color:#428bca;
+        }
+        .rightpart .tc-gridbox:hover {
+            border:0;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        .rightpart .tc-gridbox{
+            background: none;
+        }
+
+        .img-thumbnail {
+            border: 0;
+            border-radius: 0;
+        }
+
+        .middle-row .show-grid [class^="col-"]:nth-child(1), .middle-row .show-grid [class^="col-"]:nth-child(4) {
+            background-color: #FFFFFF;
+        }
+
+        tr td {
+            text-align: center;
+            padding: 5px 0 5px 5px;
+        }
+
+        tr td:last-child {
+            padding-right: 5px;
+        }
+
+        .tiny-gap-td,.tiny-gap-td td {
+            padding-top: 2px;
+            padding-bottom: 0px;
+            padding-right: 0;
+            position: relative;
+        }
+
+        [class^='span'] {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .tc-gridbox .item-image img {
+        }
+
+        .tc-gridbox .body {
+            min-height: 100px;
+        }
+
+        .show-grid.columns [class^="col-"] {
+            padding: 0;
+            border: 0;
+            background: transparent;
+        }
+
+        .qingyuedu *{
+            color:#FFF;
+        }
+
+        .flips-item-dots{
+            background-color: rgb(50, 51, 52);
+            border: 1px solid #FFF;
+            border-radius: 50%;
+            padding: 5px;
+            margin-right: 5px;
+            transform: scale(0.7, 0.7);
+        }
+
+        .flips-item-dots.active,.flips-item-dots.active:hover{
+            background-color: darkorange;
+        }
+        .flips-item-dots:hover{
+            background-color: #C9C5C5;
+        }
+        #tleftbox{
+            vertical-align: top;
+        }
+        div.custom-caption {
+            height: 175px;
+            background: rgb(50, 51, 52) !important;
+        }
+        #manageBusinessArticles {
+            background: transparent;
+            /*background: rgb(221, 223, 221);*/
+        }
+        #manageBusinessArticles tbody tr td {
+            padding-right: 9px;
+        }
+        #manageBusinessArticles tbody tr td:first-child {
+            padding-left: 0px;
+            padding-right: 9px;
+        }
+        #manageBusinessArticles tbody tr td:last-child {
+            padding-right: 0px;
+        }
+        .tc-gridbox .header .item-image {
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+        .tc-gridbox img.img-responsive {
+            /*height: 246px;*/
+            width: 100%
+        }
+        #tleftbox div.show-grid div.rightpart:nth-child(2) {
+            background-color: rgb(225, 225, 225); border: 1px rgb(225, 225, 225) solid;
+        }
+        #tleftbox div.show-grid div.rightpart:nth-child(3) {
+            background-color: rgb(225, 225, 225); border: 1px rgb(225, 225, 225) solid;
+        }
+        .custom-caption-wraper {
+            padding-top: 11px;
+            left: 0;
+            width: 100%;
+            height: 152px;
+            background-color: rgb(50, 53, 56);
+            color: #fff;
+        }
+        .slider-operation {
+            background-color: inherit; height: 185px;
+            padding: 0px;
+        }
+        .custom-navigation > a {
+            /*color: #a9a9a9;*/
+            color:#000;
+            text-align: center;
+            font-size: 20px;
+            display: block;
+            font-weight: bold;
+        }
+        .custom-navigation:hover {
+            cursor: pointer;
+        }
+        .custom-navigation > a:hover {
+            text-decoration: none;
+        }
+        .custom-navigation {
+            width: 26px;
+            height: inherit;
+            background-color: #fff;
+            display: inline-block;
+            padding-top: 80px;
+            margin: auto;
+        }
+        .flexslider {
+            background-color: inherit;
+            border: 0;
+        }
+        .red-information p {
+            margin-bottom: 5px;
+        }
+        .flexslider ol.flex-control-paging {
+            display: none;
+        }
+        .flexslider {
+             -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            -o-box-shadow: none;
+             box-shadow: none;
+        }
+        .qingyuedu .col-sm-4 .tc-gridbox{
+            border-color: #FFFFFF;
+        }
+        .qingyuedu .col-sm-4:first-child .tc-gridbox{
+            border-left: 0;
+        }
+        .qingyuedu .col-sm-4:last-child .tc-gridbox{
+            border-right: 0;
+        }
+        .qingyuedu .col-sm-4:nth-child(2n+2) .tc-gridbox{
+            border: 0;
+        }
+        .qingyuedu .col-sm-4:last-child {
+            float: right;
+        }
+        .qingyuedu .tc-gridbox:hover {
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        .article-three-columns-box {
+            margin-bottom: 20px;
+        }
+        .tc-gridbox .header hr{
+            border-top-color: #555;
+        }
+
+        .tc-gridbox .body{
+            padding-top: 4px;;
+        }
+        .tc-gridbox .circle{
+            width: 30px;
+            height: 30px;
+            background-size: 30px 30px;
+        }
+        .tc-gridbox .footer {
+            border-bottom: 1px solid #000;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .tc-gridbox .avatar {
+            width: 50px;
+            height: 60px;
+            display: block;
+            /*background-color: red;*/
+            background-image: url('__TMPL__Public/assets/images/author.jpg');
+            background-repeat: no-repeat;
+            -webkit-background-clip: content-box;
+            background-clip: content-box;
+            -webkit-background-size: 100%;
+            background-size: 100%;
+        }
+        .flexslider ul.slides img.img-responsive:hover {
+            border: 0px dashed lightgoldenrodyellow;
+        }
+        ul.slides li {
+            padding: 0;
+            margin: 0;
+            width: 178px !important;
+        }
+        .article-title {
+            color: #100d0d;
+            font-size: 16px;
+        }
+        .tc-gridbox a{
+            text-decoration: none;
+            /*color: initial;*/
+            cursor: pointer;
+        }
+        .tc-gridbox p{
+            line-height: 24px;
+        }
+
+        .tc-gridbox .header table:hover a,.tc-gridbox a:hover{
+            color:#428bca;
+        }
+        .title-in-one-line {
+            display: grid;
+        }
+        .title-in-one-line a {
+            white-space: nowrap;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+        }
+        .ellipsis{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .article-three-columns-box .ellipsis{
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .tc-gridbox svg{
+            width: 30px;
+            height: 30px;
+        }
+
+        .show-grid .tc-gridbox svg:hover{
+            /*fill: #dddddd;*/
+        }
+        .chinese-columns svg path,.digital-media svg path{
+            fill: #ffffff;
+        }
+
+        .tc-gridbox .body a:hover{
+            color:#666;
+        }
+        .hot-articles tr>td{
+            border-bottom:3px transparent solid ;
+            border-left:3px transparent solid ;
+        }
+        .hot-articles tr>td:first-child{
+            border-right:0;
+        }
+
+        .flex-direction-nav .flex-prev, .flex-direction-nav .flex-next{
+            display: none;
+        }
+        .underline:hover{
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="body-white">
+<tc_include file="Public:nav"/>
+
+<div style="background-color: rgb(235, 235, 235); padding-bottom: 0px;padding-top: 25px;">
+    <div class="container middle-row">
+        <div class="row">
+            <table width="100%">
+                <tbody>
+                <tr>
+                    <td style="vertical-align: top; padding: 0;position: relative;" class="col-md-7 col-sm-7">
+                        <div id="flips" style="padding-left: 0;">
+                        <foreach name="home_slides" item="vo">
+                            <div class="flips-item" style="position: inherit;">
+                                <a href="{$vo.slide_url}"><img class="flips-item-image" src="{:sp_get_asset_upload_path($vo['slide_pic'])}" alt="" style="width:100%; height: 408px;"></a>
+
+                                <div class="caption-wraper">
+                                    <div class="caption custom-caption">
+                                        <table style="width: 100%;height: 100%;">
+                                            <tbody>
+                                            <tr>
+                                                <td width="38%" class="text-left relative" style="vertical-align: top; padding: 0px 22px;">
+                                                    <h4 class="underline" style="font-size: 16px;">{$vo.slide_name}</h4>
+                                                    <p></p>
+                                                    <div class="absolute" style="bottom: 5px;">
+                                                        <foreach name="home_slides_keys" item="j">
+                                                            <a href="javascript:void(0);" class="btn btn-default flips-item-dots" data-index="{$j}"></a>
+                                                        </foreach>
+                                                    </div>
+                                                </td>
+                                                <td style="vertical-align: top; padding-right: 22px; text-align: left; padding-top: 0px;">
+                                                    <h6 class="underline" style="font-size: 14px;">
+                                                        {:msubstr($vo['slide_des'],0,100)}
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </foreach>
+                    </div>
+                </td>
+                <td id="tleftbox" style="padding: 0" class="col-md-5 col-sm-5">
+                    <php>
+                        $lastnews=sp_sql_posts("field:post_title,post_excerpt,term_relationships.object_id,terms.taxonomy,smeta,terms.term_id;group:posts.id;order:posts.post_modified desc;limit:4;where:terms.taxonomy!='magazine' and posts.is_ad!=1 and posts.recommended=1");
+                    </php>
+
+                    <div class="row show-grid" style="margin-left:0;width: 100%;">
+
+                        <foreach name="lastnews" item="vo">
+                            <php>$smeta=json_decode($vo['smeta'],true);</php>
+                            <div class="col-sm-6 rightpart" style="padding: 9px;">
+                                <div class="tc-gridbox">
+                                    <div class="header" style="background: none;">
+                                        <div class="item-image">
+                                            <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                                <if condition="empty($smeta['thumb'])">
+                                                    <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                                         class="img-responsive" alt="{$vo.post_title}"/>
+                                                    <else/>
+                                                    <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                                         class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                                </if>
+                                            </a>
+                                        </div>
+                                        <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                            <h3 class="ellipsis" style="font-size: 16px; text-indent: 0; width: inherit; display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2; white-space:inherit; text-align: left;height:40px;margin: 0;">
+                                                  {:msubstr($vo['post_title'], 0, 50,'utf-8',false)}
+                                            </h3>
+                                        </a>
+                                    </div>
+                                    <div class="body" style="margin:0; padding-left: 0px; padding-right: 0; height: 78.5px; min-height: 78.5px;">
+                                        <hr style="width: 100%;margin:5px 0;border-top-color: #555;">
+                                        <p class="ellipsis" style="font-size: 14px; white-space:inherit;text-align: left; padding-right: 0;margin-top: 5px; height: 72px; display: -webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp: 3;line-height: 24px; padding-bottom: 0; margin-bottom: 0; margin-right: 0;">
+                                            <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,100,'utf-8',false)}</a>
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </foreach>
+
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <script>
+            reSetFlipsHeight();
+//                showFlips(1);
+            function reSetFlipsHeight(){
+                var width =  $("#flips .flips-item:visible").width();
+                $("#flips .flips-item").each(function () {
+                    var h = parseInt(width*(3/4));
+
+//                        $(this).find('img').height(h);
+                    $(this).find('.caption-wraper').css({bottom: '0px'});
+                });
+            }
+            $(window).resize(function () {
+                reSetFlipsHeight();
+            });
+
+            function setCurrentFlip(index){
+                currentFlip(index);
+                s_index = index;
+                $("#flips .flips-item").eq(index-1).find("a[data-index='"+index+"'].flips-item-dots").addClass('active').siblings().removeClass('active');
+            }
+
+
+            $(".flips-item-dots").click(function () {
+                var index = parseInt($(this).data('index'));
+                setCurrentFlip(index);
+            });
+            $(".flips-item-dots").hover(function () {
+                var index = parseInt($(this).data('index'));
+                setCurrentFlip(index);
+            });
+            $(".flips-item-dots").eq(0).click();
+
+            var s_index = 1;
+            var ___timer =  setInterval(function () {
+
+                var $flipsItem = $("#flips .flips-item");
+                if(s_index>$flipsItem.length-1||s_index<0){
+                    s_index=0;
+                }
+                console.log('chenged',s_index);
+                setCurrentFlip(s_index);
+//                $flipsItem.eq(s_index).find(".flips-item-dots").eq(s_index).click();
+                s_index++;
+            }, 5000);
+        </script>
+    </div>
+
+</div>
+<div style="width: 100%; background-color: rgb(235, 235, 235); padding-top: 25px;">
+    <div class="container">
+
+    <div class="row termsGroup">
+        <table id="manageBusinessArticles" width="100%">
+            <tbody>
+            <tr>
+                <php>
+                    $home_slides=sp_getslide("", 3, "listorder DESC");
+                     $home_slides=empty($home_slides)?$default_home_slides:$home_slides;
+                </php>
+                <foreach name="home_slides" item="vo" key="k">
+                    <td width="25%">
+                        <div class="relative">
+                            <a href="{$vo.slide_url}">
+                                <img style="height: 152px;width: 100%;" src="{:sp_get_asset_upload_path($vo['slide_pic'])}" alt="">
+                                <empty name="vo['slide_pic']">
+                                        <img src="__TMPL__Public/assets/images/default_tupian1.png" style="min-height: 152px; width: 100%;" alt="{$vo.slide_name}" />
+                                </empty>
+                            </a>
+                            <div class="caption-wraper" style="bottom: 0;">
+                                <div class="caption" style="background-color: rgba(46, 46, 46, 0.8); height: 55px;">
+                                    <div class="text-left pl5">
+                                        <span class="tag ellipsis" style="color:#333;max-width:90%;display: inline-block;">
+                                            {$vo['slide_name']}
+                                        </span>
+                                        <p class="ellipsis" style="font-size: 12px;">{$vo['slide_des']}</p>
+                                    </div>
+                                </div>
+                            </div><!-- caption-wrapper -->
+                        </div><!-- end relative -->
+                    </td>
+                </foreach>
+                        <td width="25%">
+                            <php>
+                                $_SESSION['is_magazine'] = 1;
+                                $lst = sp_sql_posts_paged("where:terms.taxonomy='magazine';order:serial_number DESC;",1);
+                                unset($_SESSION['is_magazine']);
+                                $magazine = array_shift($lst['posts']);
+
+                                $magazine_smeta=json_decode($magazine['smeta'], true);
+                                // var_dump($magazine_smeta);
+                            </php>
+                            <div class="relative">
+
+                                <a href="{:leuu('Portal/list/index',array('id'=>98,'navid'=>15,'aid'=>$magazine['object_id']))}">
+                                    <img src="{:sp_get_asset_upload_path($magazine_smeta['thumb'])}" style="height: auto;width: 45%;float: right;"
+                                         class="img-responsive img-thumbnail" alt="{$magazine.post_title}" />
+                                <div class="caption-wrapper">
+                                    <div class="custom-caption-wraper">
+                                        <span class="circle hide" style="color: #fff; background-image: url('__TMPL__Public/assets/images/svg-icons/Digital_Media-qingyuedu.svg')"></span>
+                                        <h6 style="color: #fff;">{$magazine_smeta['serial_number']}期封面专题</h6>
+                                        <p class="two-lines-word-wrap" style="color: #ff0; font-size: 16px;height: auto; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; word-break: break-all; overflow: hidden; text-overflow: ellipsis; margin-bottom: 1em;">
+                                            {$magazine['post_title']}
+                                        </p>
+
+                                    </div>
+                                </div><!-- end caption-wrapper -->
+                                    </a>
+                            </div>
+                        </td>
+
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="row show-grid columns" style="padding-top: 20px;">
+
+            <foreach name="termsGroup1" key="i" item="vo">
+                <php>$smeta=json_decode($vo['smeta'],true);</php>
+                <div class="col-sm-4 article-three-columns-box">
+                    <div class="tc-gridbox">
+                        <div class="header">
+                            <table style="width:100%;" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <h4 class="text-left title-in-one-line" style="padding-left: 12px; padding-right: 1em;">
+                                            <a href="{:leuu('list/index',array('id'=>$vo['term_id'],'navid'=>$navid))}">
+                                                {$vo.subtitle}
+                                            </a>
+                                        </h4>
+                                    </td>
+                                    <td style="width: 50px;border-left: 1px solid #ddd;padding: 6px 0 0 0; vertical-align: middle;">
+
+                                    {$vo['icon_svg_code']}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="item-image" style="height: 217px;">
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <if condition="empty($smeta['thumb'])">
+                                        <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                             class="img-responsive" alt="{$vo.post_title}"/>
+                                        <else/>
+                                        <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                             class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                    </if>
+                                </a>
+                            </div>
+                            <h4 class="text-left ellipsis">
+                                <a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    {$vo.post_title}
+                                </a>
+                            </h4>
+                            <hr>
+                        </div>
+                        <div class="body">
+                            <p style="font-size: 14px;height: auto; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; word-break: break-all; overflow: hidden; text-overflow: ellipsis;" class="four-lines-word-wrap">
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,92)}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+        <div class="row show-grid columns" style="padding-top: 0px;">
+
+            <foreach name="termsGroup2" key="i" item="vo">
+                <php>$smeta=json_decode($vo['smeta'],true);</php>
+                <div class="col-sm-4 article-three-columns-box">
+                    <div class="tc-gridbox">
+                        <div class="header">
+                            <table style="width:100%;border-bottom: 1px solid #ddd; " cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <h4 class="text-left title-in-one-line"  style="padding-left: 12px; padding-right: 1em;">
+                                            <a href="{:leuu('list/index',array('id'=>$vo['term_id'],'navid'=>$navid))}">
+                                                {$vo.subtitle}
+                                            </a>
+                                        </h4>
+                                    </td>
+                                    <td style="width: 50px;border-left: 1px solid #ddd;padding: 6px 0 0 0; vertical-align: middle;">
+
+                                    <span class="circle" style="background-image: url('{:sp_get_asset_upload_path($vo['icon'])}')">
+
+                                    </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="item-image" style="height: 217px;">
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <if condition="empty($smeta['thumb'])">
+                                        <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                             class="img-responsive" alt="{$vo.post_title}"/>
+                                        <else/>
+                                        <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                             class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                    </if>
+                                </a>
+                            </div>
+                            <h4 class="text-left ellipsis"><a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_title}</a>
+                            </h4>
+                            <hr>
+                        </div>
+                        <div class="body">
+                            <p style="font-size: 14px;height: auto; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; word-break: break-all; overflow: hidden; text-overflow: ellipsis;"><a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,92)}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+        <div class="row show-grid columns" style="padding-top: 0px;">
+            <foreach name="termsGroup3" key="i" item="vo">
+                <php>$smeta=json_decode($vo['smeta'],true);</php>
+                <div class="col-sm-4 article-three-columns-box">
+                    <div class="tc-gridbox">
+                        <div class="header">
+                            <table style="width:100%;border-bottom: 1px solid #ddd; " cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <h4 class="text-left title-in-one-line" style="padding-left: 12px; padding-right: 1em;">
+                                            <a href="{:leuu('list/index',array('id'=>$vo['term_id'],'navid'=>$navid))}">
+                                                {$vo.subtitle}
+                                            </a>
+                                        </h4>
+                                    </td>
+                                    <td style="width: 50px;border-left: 1px solid #ddd;padding: 6px 0 0 0; vertical-align: middle;">
+
+                                    <span class="circle" style="background-image: url('{:sp_get_asset_upload_path($vo['icon'],true)}')">
+
+                                    </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="item-image" style="height: 217px;">
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <if condition="empty($smeta['thumb'])">
+                                        <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                             class="img-responsive" alt="{$vo.post_title}"/>
+                                        <else/>
+                                        <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                             class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                    </if>
+                                </a>
+                            </div>
+                            <h4 class="text-left ellipsis"><a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_title}</a>
+                            </h4>
+                            <hr>
+                        </div>
+                        <div class="body">
+                            <p style="font-size: 14px;height: auto; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; word-break: break-all; overflow: hidden; text-overflow: ellipsis;"><a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,92)}</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+    </div>
+    </div>
+
+
+</div>
+
+<div style="background-color: #58595b; padding-bottom: 20px;">
+
+    <div class="container" style="padding-top: 40px;">
+        <div style="background-color: #beab8d;" class=" row text-center">
+            <table style="margin: 0 auto;background: transparent;">
+                <tbody>
+                <tr>
+                    <td class="chinese-columns">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="30px" height="30px" viewBox="83.623 83.622 1533.543 1533.544"
+	 enable-background="new 83.623 83.622 1533.543 1533.544" xml:space="preserve">
+<g>
+	<g>
+		<path d="M1061.627,969.231c-28.1-6.449-52.24-19.012-86.615-4.682c-4.682-6.24-9.361-12.482-14.045-18.727
+			c21.617-42.271,8.197-115.869,28.09-161.52c11.211-25.725,146.707-68.253,184.93-72.566c-0.777-10.143-1.561-20.288-2.342-30.434
+			c-47.143-47.479-118.809,40.513-170.883,35.114c1.564-37.45,3.119-74.912,4.684-112.361
+			c19.342-38.899,80.881-47.771,102.998-88.952c0.592-64.391-51.051-46.405-84.271-74.908c-12.445-10.678-3.9-30.42-11.701-46.815
+			c-14.787-31.08-119.059-107.247-163.864-67.887c-7.375,4.241-7.906,6.548-11.704,14.047c0,3.119,0,6.241,0,9.363
+			c84.492-20.119,75.794,14.547,91.294,88.953c4.121,19.782,19.234,39.178,4.682,60.861c-12.254,20.144-56.273,22.658-81.932,32.773
+			c-58.528,23.077-124.827,56.493-205.994,74.906c-47.584,10.798-92.342-7.831-131.087-9.362
+			c13.925,24.248,43.534,32.575,72.565,42.136c108.414,35.702,202.046-8.353,285.586-44.477
+			c20.285-10.143,40.574-20.288,60.861-30.433c3.9,6.244,7.803,12.487,11.707,18.729c-17.955,30.978-57.174,48.371-60.865,88.952
+			c-7.02-1.561-14.043-3.12-21.066-4.683c-11.688,24.766-179.751,156.563-217.701,159.18c-1.557,11.398,0.407,17.618,4.682,28.086
+			c-5.462,1.563-10.925,3.125-16.385,4.686c-1.563,14.822-3.122,29.652-4.682,44.479c3.119,2.338,6.24,4.682,9.362,7.02
+			c69.014,12.111,120.571-54.545,168.542-77.248c25.237-11.941,49.996-3.856,60.863-30.43c19.762,7.039,39.475-1.728,56.182-9.366
+			c1.563,0.781,3.119,1.563,4.682,2.341c-4.682,47.594-9.361,95.201-14.043,142.791c-6.244,11.707-12.488,23.414-18.729,35.115
+			c5.457,21.066,10.92,42.139,16.383,63.203c52.889-13.131,42.098-43.598,133.432-42.137c16.385,11.701,32.77,23.408,49.16,35.113
+			c51.51,75.801-8.816,236.976-58.521,271.54c-37.82,26.299-94.578,27.643-140.451,32.771
+			c-147.789,16.52-270.069-72.574-266.859-241.106c4.682-4.682,9.362-9.363,14.044-14.045c0-0.779,0-1.561,0-2.342
+			c-94.633,30.461,24.165,212.132,58.521,238.769c49.555,38.418,191.797,75.037,264.518,70.227
+			c46.951-3.105,99.763-30.094,141.093-37.156c0-3.9,0-7.807,0-11.707C1227.308,1257.78,1227.848,1007.387,1061.627,969.231z
+			 M923.516,746.852c-37.775,39.925-123.132,48.724-170.883,77.248c-4.962-8.832-7.201-14.335-4.681-25.751
+			c26.832-52.734,136.878-95.197,163.857-142.792c12.615,2.271,17.916,5.554,25.75,11.704
+			C926.112,693.452,916.971,713.452,923.516,746.852z"/>
+		<path d="M832.221,1210.34c9.156,14.574-1.104,21.25,16.386,30.434c10.888,5.242,41.515,3.9,49.158-2.344
+			c11.73-6.705,17.869-25.08,23.408-37.453c-2.229-74.014-119.693-149.684-196.631-154.5c-21.846,3.125-43.699,6.244-65.544,9.363
+			c-3.119,3.906-6.241,7.807-9.363,11.707c0,0.781,0,1.563,0,2.344C761.16,1062.575,787.613,1139.317,832.221,1210.34z"/>
+	</g>
+	<path  d="M850.396,163.622c92.748,0,182.681,18.147,267.298,53.937c40.678,17.205,79.916,38.504,116.627,63.306
+		c36.384,24.58,70.601,52.811,101.696,83.908c31.098,31.097,59.328,65.313,83.908,101.696c24.801,36.71,46.1,75.95,63.305,116.626
+		c35.791,84.617,53.939,174.549,53.939,267.298c0,92.75-18.146,182.683-53.939,267.298c-17.203,40.678-38.504,79.916-63.305,116.625
+		c-24.58,36.386-52.811,70.601-83.908,101.696c-31.096,31.098-65.313,59.328-101.696,83.908
+		c-36.713,24.803-75.949,46.102-116.627,63.307c-84.615,35.789-174.551,53.938-267.298,53.938
+		c-92.748,0-182.681-18.146-267.298-53.938c-40.677-17.205-79.916-38.504-116.627-63.307
+		c-36.383-24.58-70.599-52.811-101.695-83.908c-31.098-31.096-59.329-65.313-83.909-101.696
+		c-24.801-36.709-46.1-75.947-63.305-116.625c-35.79-84.615-53.937-174.551-53.937-267.298c0-92.748,18.147-182.681,53.937-267.298
+		c17.205-40.677,38.504-79.916,63.305-116.626c24.581-36.383,52.811-70.599,83.91-101.696
+		c31.098-31.097,65.313-59.329,101.695-83.909c36.711-24.802,75.95-46.101,116.627-63.306
+		C667.714,181.769,757.647,163.622,850.396,163.622 M850.396,83.622c-423.477,0-766.771,343.295-766.771,766.771
+		c0,423.479,343.295,766.772,766.771,766.772c423.477,0,766.772-343.293,766.772-766.772
+		C1617.169,426.917,1273.875,83.622,850.396,83.622L850.396,83.622z"/>
+</g>
+</svg>
+                    </td>
+                    <td><a style="color:#FFFFFF;" href="{:U('Portal/List/index',array('id'=>$huawenColumnsArticles[0]['term_id']))}">华闻专栏 Columns</a> </td>
+                </tr>
+                </tbody>
+            </table>
+<!---->
+        </div>
+
+        <div class="row show-grid columns" style="margin-top: 20px;">
+
+            <foreach name="huawenColumnsArticles" item="vo">
+                <php>$smeta=json_decode($vo['smeta'],true);</php>
+                <div class="col-sm-3 article-four-columns-box">
+                    <div class="tc-gridbox" style="border: 0; padding-bottom: 20px;">
+                        <div class="header" style="padding-bottom: 0px;">
+                            <div class="item-image" style="height: 172px; margin-bottom: 10px;">
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <if condition="empty($smeta['thumb'])">
+                                        <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                             class="img-responsive" alt="{$vo.post_title}"/>
+                                        <else/>
+                                        <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                             class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                    </if>
+                                </a>
+                            </div>
+                            <div class="tag-group hide">
+                                <span class="inner-black-tag"> 华闻专栏 </span>
+                                <span class="inner-white-tag"> Columns </span>
+                            </div>
+                            <h4  class="text-left ellipsis" style="padding: 0 14px;">
+                                <a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_title}</a>
+                            </h4>
+                            <hr style="width: 215px; margin-left: 10px; margin-top: -5px;" />
+                        </div>
+                        <div class="description-wrapper">
+                            <div class="body" style="position: relative;min-height: 85px; padding-bottom: 0; margin-bottom: 20px;">
+                                <p style="font-size: 12px; color: gray;" class="hide">作者|{$vo.author|default="本站编辑"}</p>
+                                <p class="ellipsis" style="font-size: 14px;height: 96px; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; ">
+                                    <a style="white-space: normal;" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,120,'utf-8',false)}</a>
+                                </p>
+                                <p style="font-size: 12px; color: gray; position: absolute; bottom: 0px;" class="hide">发布时间: {$vo.post_date}</p>
+                            </div>
+                            <div class="footer" style="min-height:61px;">
+                                <section class="author-name">
+                                    <p> 作者&nbsp;|&nbsp;{$vo['author_name'] | default="今日华闻"} </p>
+                                </section>
+                                <section class="author-avatar">
+                                    <empty name="vo['author_avatar']">
+                                        <img src="__TMPL__Public/assets/images/author.jpg"  style="height: 50px;" />
+                                        <else />
+                                        <img src="{:sp_get_asset_upload_path($vo['author_avatar'])}"  style="height: 50px;" />
+                                    </empty>
+                                </section>
+                            </div><!-- end footer -->
+                        </div><!-- end description-wrapper -->
+                    </div>
+                </div>
+            </foreach>
+        </div>
+    </div>
+
+</div>
+
+<div style="background-color: rgb(235, 235, 235); padding-bottom: 20px;">
+
+    <div class="container">
+        <div style="background-color: #58595b; margin-top: 40px;" class="row text-center">
+            <table style="margin: 0 auto;background: transparent;">
+                <tbody>
+                <tr>
+                    <td class="digital-media">
+                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="30px" height="30px" viewBox="83.623 83.622 1533.543 1533.544" style="margin-top: 3px;"
+	 enable-background="new 83.623 83.622 1533.543 1533.544" xml:space="preserve">
+<g>
+	<path d="M1075.353,320.989h-449.92c-30.476,0-55.181,24.705-55.181,55.18v948.45c0,30.477,24.706,55.18,55.181,55.18h449.92
+		c30.479,0,55.184-24.703,55.184-55.18v-948.45C1130.537,345.694,1105.832,320.989,1075.353,320.989z M786.426,354.077h127.939
+		c5.482,0,9.928,4.444,9.928,9.927c0,5.482-4.443,9.925-9.928,9.925H786.426c-5.483,0-9.928-4.443-9.928-9.925
+		C776.498,358.521,780.942,354.077,786.426,354.077z M850.395,1352.875c-24.365,0-44.117-19.75-44.117-44.117
+		c0-24.365,19.751-44.117,44.117-44.117c24.367,0,44.117,19.752,44.117,44.117C894.511,1333.125,874.761,1352.875,850.395,1352.875z
+		 M1091.226,1205.74c0,24.252-21.236,43.912-47.434,43.912H656.997c-26.2,0-47.438-19.66-47.438-43.912V450.932
+		c0-24.253,21.237-43.914,47.438-43.914h386.795c26.197,0,47.436,19.661,47.436,43.914v754.808H1091.226z"/>
+	<rect x="887.378" y="792.596" width="37.381" height="9.989"/>
+	<rect x="1017.298" y="825.519" width="11.963" height="4.214"/>
+	<rect x="887.378" y="815.133" width="37.381" height="9.981"/>
+	<rect x="887.378" y="837.67" width="37.381" height="9.975"/>
+	<path d="M633.166,923.091h434.458V716.393H633.166V923.091z M949.697,792.596h-9.756v91.722h-15.182v-24.123h-37.381v11.697H872.22
+		v-79.296h-8.637v-13.854h61.176h15.182h9.756V792.596L949.697,792.596z M1017.298,833.491v0.041h-3.771v-11.145h2.24h1.531h11.963
+		h1.779h1.986v11.145h-3.768v-0.041H1017.298z M1013.55,812.925v-3.143h7.705v-2.702h4.299v2.702h7.705v3.143h-7.705v2.766h7.705
+		v3.144h-19.709v-3.144h7.705v-2.766H1013.55z M1035.13,885.039h-4.264v-32.359h4.264V885.039z M1043.24,882.343
+		c0,4.396-1.195,8.771-5.521,9.482v-1.529c1.406-1.969,1.256-6.264,1.256-7.953v-31.063h4.268v31.063H1043.24z M1004.142,803.846
+		v-4.236v-0.034h38.529v4.271h-0.002v27.006c0,4.392-1.197,8.769-5.523,9.465v-1.52c1.408-1.969,1.262-6.267,1.262-7.945v-27.006
+		h-30.004v34.614h-4.262V803.846L1004.142,803.846z M1003.564,863.324h9.936v-6.373h-9.936v-4.279h24.121v4.279h-9.928v6.373h9.928
+		v4.271h-9.928v24.453h-4.26v-24.453h-9.934V863.324L1003.564,863.324z M862.8,749.474h98.5v-0.106h15.059v109.525
+		c0,15.486-4.229,30.92-19.463,33.4v-5.389c4.938-6.93,4.404-22.09,4.404-28.012V764.51h-98.5V749.474z M836.987,749.474h15.051
+		v15.42h-15.051V749.474z M836.987,774.067h15.051v117.741h-15.051V774.067z M712.936,788.684l16.528-4.495v-34.715H744.5v30.621
+		l24.174-6.578c5.958-1.626,18.525-10.427,22.565-20.209h15.76c-2.918,16.296-16.836,29.408-33.574,33.971l-28.925,7.874v3.586
+		c0,9.152,1.606,13.974,12.479,13.974h53.016v15.164h-56.069c-17.731,0-24.459-10.261-24.459-23.784v-4.842l-16.527,4.483v-15.05
+		H712.936z M664.843,772.129c18.483-6.066,27.775-23.954,27.775-23.954h16.686c-3.013,8.649-7.495,15.459-12.477,20.812v63.664
+		h-15.036v-51.843c-9.259,5.251-16.949,6.737-16.949,6.737L664.843,772.129L664.843,772.129z M664.628,847.378H729.6v-15.856h15.056
+		v15.856h64.974v15.055h-64.974v29.375H729.6v-29.375h-64.971L664.628,847.378L664.628,847.378z"/>
+	<path  d="M850.394,83.622c-423.477,0-766.771,343.295-766.771,766.771c0,423.475,343.295,766.772,766.771,766.772
+		c423.477,0,766.772-343.297,766.772-766.771C1617.166,426.917,1273.871,83.622,850.394,83.622z M1419.923,1234.318
+		c-24.58,36.383-52.811,70.6-83.908,101.695c-31.098,31.098-65.313,59.33-101.695,83.908
+		c-36.713,24.803-75.951,46.102-116.627,63.307c-84.617,35.789-174.551,53.938-267.298,53.938
+		c-92.75,0-182.682-18.146-267.299-53.938c-40.677-17.205-79.916-38.504-116.627-63.307c-36.383-24.58-70.599-52.811-101.695-83.908
+		c-31.098-31.096-59.329-65.313-83.908-101.695c-24.802-36.711-46.101-75.949-63.306-116.625
+		c-35.79-84.619-53.937-174.551-53.937-267.298c0-92.75,18.147-182.682,53.937-267.299c17.205-40.677,38.504-79.916,63.306-116.627
+		c24.58-36.383,52.811-70.599,83.908-101.696c31.097-31.097,65.313-59.328,101.695-83.908
+		c36.711-24.802,75.95-46.101,116.627-63.306c84.617-35.79,174.55-53.937,267.299-53.937c92.748,0,182.681,18.147,267.298,53.937
+		c40.676,17.205,79.916,38.504,116.627,63.306c36.383,24.58,70.598,52.811,101.695,83.908
+		c31.098,31.097,59.328,65.313,83.908,101.696c24.801,36.711,46.1,75.95,63.305,116.627c35.789,84.617,53.938,174.55,53.938,267.299
+		c0,92.748-18.146,182.681-53.938,267.298C1466.025,1158.369,1444.724,1197.607,1419.923,1234.318z"/>
+</g>
+</svg>
+                    </td>
+                    <td><a style="color:#FFFFFF;" href="{:U('Portal/List/index',array('id'=>$qingyueduArticles[0]['term_id']))}">轻阅读 Easy Reading</a></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="row show-grid columns qingyuedu" style="padding-top: 0px;">
+
+            <foreach name="qingyueduArticles" key="i" item="vo">
+                <if condition="$i lt 3">
+                    <php>$smeta=json_decode($vo['smeta'],true);</php>
+                    <php>
+                        $style = "";
+                        if($i==1){
+                            $style = 'border:0;';
+                        }
+                    </php>
+                    <div class="col-sm-4">
+                        <div class="tc-gridbox" style="background-color:#30a6c0; padding: 20px 23px; border-top: 0;">
+                            <div class="header" style="background-color:#30a6c0; ">
+
+                                <div class="item-image" style="height: 198px;">
+                                    <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                        <if condition="empty($smeta['thumb'])">
+                                            <img src="__TMPL__Public/assets/images/default_tupian1.png" style="background-color:#30a6c0; height: 198px;margin: 0;"
+                                                 class="img-responsive" alt="{$vo.post_title}"/>
+                                            <else/>
+                                            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}" style="background-color:#30a6c0; height: 198px;margin:0;"
+                                                 class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                        </if>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="body" style="padding: 0px; height: 185px; position: relative; margin-top: 10px;margin-bottom: 0;">
+                                <p class="hide">
+                                    <span class="label label-warning blue-tag">华闻周刊</span>
+                                </p>
+                                <p style="height: auto; font-size: 16px; text-indent: 0px; width: inherit; white-space: nowrap; overflow: hidden; -ms-text-overflow: ellipsis; text-overflow: ellipsis; text-align: left; margin-left: 0px;">
+                                    <a style="color: #fff;" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_title}</a>
+                                </p>
+                                <hr style="width: 100%;margin:5px 0;border-top-color: #fff;">
+                                <p style="font-size: 12px; color: #fff;"> {$vo.author | default="今日华闻"} </p>
+                                <p class="ellipsis" style="font-size: 14px;height: auto; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; ">
+                                    <a style="white-space: normal;color:#fff;" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_excerpt'],0,200,'utf-8',false)}</a>
+                                </p>
+                                <p style="text-align: right; font-size: 12px; color: #fff; position: absolute; bottom: -20px; right: 0;"> 发布时间: {$vo['post_date2']} </p>
+                            </div>
+                        </div>
+                    </div>
+                </if>
+            </foreach>
+
+        </div>
+
+        <div class="row show-grid columns qingyuedu" style="padding-top: 20px;">
+
+            <foreach name="qingyueduArticles" key="i" item="vo">
+                <if condition="$i gt 2 and $i lt 7">
+                    <php>$smeta=json_decode($vo['smeta'],true);</php>
+                    <div class="col-sm-3 article-four-columns-box">
+                        <div class="tc-gridbox">
+                            <div class="header">
+                                <h4 class="initial-font" style="text-align: left; margin-left: 12px;"><a href="{:U('Portal/List/index',array('id'=>$vo['term_id']))}"> 轻阅读 Easy Reading </a></h4>
+                                <div class="item-image" style="height: 163px;">
+                                    <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                        <if condition="empty($smeta['thumb'])">
+                                            <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                                 class="img-responsive" alt="{$vo.post_title}"/>
+                                            <else/>
+                                            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                                 class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                        </if>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="body" style="min-height: 190px; margin-top: 10px;">
+                                <p class="hide"><span class="label label-primary tag">华闻周刊</span></p>
+                                <p class="ellipsis" style="height: auto; font-size: 14px; text-indent: 0px; text-align: left; margin-left: 0px;">
+                                    <a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_title'], 0, 20, 'utf-8', false)}</a>
+                                </p>
+                                <hr style="width: 100%;margin:5px 0;border-top-color: #555;">
+                                <h6 style="margin: 0; color: gray;">{$vo['author'] | default=""}&nbsp;</h6>
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <p class="ellipsis" style="font-size: 14px;color:gray;height: auto;white-space: normal; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; ">
+                                    {:msubstr($vo['post_excerpt'],0,135,'utf-8',false)}
+                                </p></a>
+                                <p style="text-align: right; font-size: 12px; color: gray; position: absolute; bottom: 0px; right: 25px;"> 发布时间: {$vo['post_date2']} </p>
+                            </div>
+                        </div>
+                    </div>
+                </if>
+            </foreach>
+
+        </div>
+        <div class="row show-grid columns qingyuedu" style="padding-top: 20px;">
+
+            <foreach name="qingyueduArticles" key="i" item="vo">
+                <if condition="$i gt 6 && $i lt 11">
+                    <php>$smeta=json_decode($vo['smeta'],true);</php>
+                    <div class="col-sm-3 article-four-columns-box">
+                        <div class="tc-gridbox">
+                            <div class="header">
+                                <h4 class="initial-font" style="text-align: left; margin-left: 12px;"><a href="{:U('Portal/List/index',array('id'=>$vo['term_id']))}"> 轻阅读 Easy Reading </a></h4>
+                                <div class="item-image" style="height: 163px;">
+                                    <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                        <if condition="empty($smeta['thumb'])">
+                                            <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                                 class="img-responsive" alt="{$vo.post_title}"/>
+                                            <else/>
+                                            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                                 class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                        </if>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="body" style="min-height: 190px; margin-top: 10px;">
+                                <p class="hide"><span class="label label-primary tag">华闻周刊</span></p>
+                                <p class="ellipsis" style="height: auto; font-size: 14px; text-indent: 0px; text-align: left; margin-left: 0px;">
+                                    <a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_title'], 0, 20, 'utf-8', false)}</a>
+                                </p>
+                                <hr style="width: 100%;margin:5px 0;border-top-color: #555;">
+                                <h6 style="margin: 0; color: gray;">{$vo['author'] | default=""}&nbsp;</h6>
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <p class="ellipsis" style="font-size: 14px;color:gray;height: auto;white-space: normal; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; ">
+                                        {:msubstr($vo['post_excerpt'],0,135,'utf-8',false)}
+                                    </p></a>
+                                <p style="text-align: right; font-size: 12px; color: gray; position: absolute; bottom: 0px; right: 25px;"> 发布时间: {$vo['post_date2']} </p>
+                            </div>
+                        </div>
+                    </div>
+                </if>
+            </foreach>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div style="background-color: #58595b; padding-bottom: 20px; padding-top: 40px;">
+
+    <div class="container" >
+
+        <div class="row show-grid columns">
+
+            <foreach name="huarendongtaiArticles" key="i" item="vo">
+                    <php>$smeta=json_decode($vo['smeta'],true);</php>
+                    <div class="col-sm-3 article-four-columns-box">
+                        <div class="tc-gridbox">
+                            <div class="header">
+                                <h4 class="initial-font" style="text-align: left;"> <a href="{:U('Portal/List/index',array('id'=>$vo['term_id']))}"><span class="inner-black-tag">华人动态</span> Chinese Communities </a></h4>
+                                <div class="item-image" style="height: 163px;">
+                                    <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                        <if condition="empty($smeta['thumb'])">
+                                            <img src="__TMPL__Public/assets/images/default_tupian1.png"
+                                                 class="img-responsive" alt="{$vo.post_title}"/>
+                                            <else/>
+                                            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                                 class="img-responsive img-thumbnail" alt="{$vo.post_title}"/>
+                                        </if>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="body" style="min-height: 166px; margin-top: 10px;">
+                                <p class="hide"><span class="label label-primary tag">华闻周刊</span></p>
+                                <p class="ellipsis" style="height: auto; font-size: 14px; text-indent: 0px; text-align: left; margin-left: 0px;">
+                                    <a class="article-title" href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{:msubstr($vo['post_title'], 0, 20, 'utf-8', false)}</a>
+                                </p>
+                                <hr style="width: 100%;margin:5px 0;border-top-color: #555;">
+                                <h6 style="margin: 0; color: gray;">{$vo['author'] | default=""}&nbsp;</h6>
+                                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                                    <p class="ellipsis" style="font-size: 14px;color:gray;height: auto;white-space: normal; padding: 0; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; ">
+                                        {:msubstr($vo['post_excerpt'],0,135,'utf-8',false)}
+                                    </p></a>
+                                <p style="text-align: right; font-size: 12px; color: gray; position: absolute; bottom: 0px; right: 25px;"> 发布时间: {$vo['post_date2']} </p>
+                            </div>
+                        </div>
+                    </div>
+            </foreach>
+        </div>
+    </div>
+
+</div>
+
+<notempty name="rotate_list">
+<div style="background-color: rgb(235, 235, 235);">
+    <div class="container">
+        <div class="row" style="margin: 40px 0;">
+            <table class="rotate_list" style="width: 100%;background-color: transparent;">
+                <tbody>
+                <tr>
+                    <td class="slider-operation" >
+                        <span class="custom-navigation" style="margin-left: 0"> <a href="#" class="flex-prev"> < </a> </span>
+                    </td>
+                    <td style="padding: 0;">
+                        <div class="flexslider carousel" style="margin: 0 auto;">
+                            <ul class="slides">
+                                <foreach name="rotate_list" item="vo">
+                                    <php>$smeta=json_decode($vo['smeta'],true);</php>
+                                    <li style="text-align: center; ">
+                                        <!--{:leuu('article/magazine_detail', array('id'=>$vo['object_id'],'navid'=>$navid))}-->
+                                        <a target="_blank" href="http://app.ihuawen.com/">
+                                            <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                                                 class="img-responsive" alt="{$vo.post_title}" style="width: 158px; height: 209px; margin: 0 auto;" />
+                                        </a>
+                                    </li>
+                                </foreach>
+                            </ul>
+                        </div><!-- flexslider -->
+                    </td>
+                    <td class="slider-operation" style="padding: 0;">
+                        <span class="custom-navigation" style="margin-right: 0;"> <a href="#" class="flex-next"> > </a> </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div><!--container-->
+</div>
+</notempty>
+
+<div>
+    <style>
+        td.tiny-gap-td:hover {
+            -webkit-filter: brightness(1.2);
+            filter: brightness(1.2);
+        }
+    </style>
+    <div class="container">
+        <div class="row show-grid" style="padding: 0; margin-top: 40px;">
+            <div class="col-sm-9" style="padding: 0;border: 0;background-color: transparent;">
+                <table width="100%" class="hot-articles">
+                    <tbody>
+                    <tr>
+                        <td colspan="4" style="padding-left: 0; padding-bottom: 0;padding-right: 0;">
+                            <div style="background-color: #000;">
+                                <table style="margin: 0 auto;background: transparent;">
+                                    <tbody>
+                                    <tr class="tiny-gap-td">
+                                        <td>
+                                            <span class="circle" style="background-image: url('__TMPL__Public/assets/images/logo_icon_gold.png')">
+
+                                        </span>
+                                        </td>
+                                        <td style="color:#FFFFFF;">热门文章</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <for start="0" end="4" name="j">
+
+                            <if condition="isset($hottest_articles[$j])">
+                                <php>
+                                    $vo = $hottest_articles[$j];
+                                    $smeta=json_decode($vo['smeta'],true);
+                                </php>
+
+                                <if condition="empty($smeta['thumb'])">
+                                    <td style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('__TMPL__Public/assets/images/default_tupian1.png'); background-color:gray;background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+                                        <div class="caption-wraper" style="bottom: 0;height: 25px;">
+                                            <div class="caption custom-caption ellipsis" style="height:25px;padding:5px 8px">
+                                                {$vo.post_title}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <else/>
+                                    <td onclick="location.href='{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}';" style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('{:sp_get_asset_upload_path($smeta['thumb'])}'); background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+
+                                        <div class="caption-wraper" style="bottom: 0;height: 25px;">
+                                            <div class="caption custom-caption ellipsis" style="height:25px;padding:5px 8px">
+                                                {$vo.post_title}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </if>
+
+                                <else/>
+                                <td style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('__TMPL__Public/assets/images/default_tupian1.png'); background-color:gray;background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+
+                                </td>
+                            </if>
+                        </for>
+
+                    </tr>
+
+                    <tr>
+                        <for start="4" end="8" name="j">
+                            <if condition="isset($hottest_articles[$j])">
+                                <php>
+                                    $vo = $hottest_articles[$j];
+                                    $smeta=json_decode($vo['smeta'],true);
+                                </php>
+                                <if condition="empty($smeta['thumb'])">
+                                    <td style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('__TMPL__Public/assets/images/default_tupian1.png'); background-color:gray;background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+                                        <div class="caption-wraper" style="bottom: 0;height: 25px;">
+                                            <div class="caption custom-caption ellipsis" style="height:25px;padding:5px 8px">
+                                                {$vo.post_title}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <else/>
+                                    <td onclick="location.href='{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}';" style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('{:sp_get_asset_upload_path($smeta['thumb'])}'); background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+
+                                        <div class="caption-wraper" style="bottom: 0;height: 25px;">
+                                            <div class="caption custom-caption ellipsis" style="height:25px;padding:5px 8px">
+                                                {$vo.post_title}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </if>
+
+                                <else/>
+                                <td style="padding-left: 3px;overflow: hidden; height: 180px;width:25%;background-image: url('__TMPL__Public/assets/images/default_tupian1.png'); background-color:gray;background-repeat: no-repeat; background-size: auto 100%; background-position: center center;" class="tiny-gap-td">
+
+                                </td>
+                            </if>
+                        </for>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-3" style="padding: 0;border: 0;background-color: transparent;">
+                <table width="100%">
+                    <tbody>
+                    <tr>
+                        <td style="padding-right: 0; padding-bottom: 0;">
+                            <div style="background-color: #000;">
+                                <table style="margin: 0 auto;background: transparent;">
+                                    <tbody>
+                                    <tr class="tiny-gap-td">
+                                        <td style="padding-bottom: 3px;">
+                                            <span class="circle" style="background-image: url('__TMPL__Public/assets/images/logo_icon_gold.png')">
+                                            </span>
+                                        </td>
+                                        <td style="color:#FFFFFF;">投稿 · 来信</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="25%" style="padding-right: 0; padding-top: 3px; padding-bottom: 3px;">
+                            <div style="background-color: #7c716d;color:#FFFFFF; height: 177px; text-align: left; font-size: 12px; padding: 10px;">
+                                <p style="vertical-align: middle;"> 不管您身在中国还是旅居海外，我们欢迎世界各地的读者朋友与《华闻周刊》分享留学心得、海外生活感悟、创业经历或旅行见闻。照片和文字投稿请联络：</p>
+                                <br/>
+                                <p>编辑部：<br/>editor@thechineseweekly.com </p>
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td width="25%" style="padding-right: 0; padding-top:0;">
+                            <div class="red-information" style="background-color: #c4566c;color:#FFFFFF; height: 177px; text-align: left; font-size: 12px; padding: 10px;">
+                                <p>华闻团队为许多品牌做出了成功的市场营销方案，如果您有广告投放、公关活动方面的合作意向，请联络：</p>
+                                <p>广告部：<br/>ads@thechineseweekly.com</p>
+                                <p>市场及公关部：<br/>pr@thechineseweekly.com</p>
+                            </div>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<tc_include file="Public:footer2"/>
+{:hook('footer_end')}
+
+</body>
+</html>

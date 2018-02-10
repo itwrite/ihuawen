@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<tc_include file="Public:head" />
+</head>
+
+<body class="body-gray" id="top">
+	<tc_include file="Public:nav" />
+
+	<div class="container tc-main">
+		<div class="row">
+			<style>
+				.well{
+					background: #FFFFFF;
+				}
+				.well:after{
+					content: ' ';
+					clear: both;
+				}
+				.user-nav .label{
+					background-color: #FFFFFF;
+					color: #333333;
+					border-radius: 0;
+					padding: 4px 8px;
+				}
+				.user-nav .label.active{
+					background-color: #555555;
+					color: #FFFFFF;
+				}
+				.panel{
+					border-radius: 0;
+					border-width: 0;
+				}
+				.user-nav .label,.user-nav .badge{
+					font-size: 14px;;
+				}
+			</style>
+			<div class="well user-nav">
+				<a href="{:U('user/center/index')}"><span class="label">账户设置</span></a>
+				<a href="{:U('user/notification/index')}"><span class="label">消息</span></a>
+				<a href="{:U('user/favorite/index')}"><span class="label active">收藏夹</span></a>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-3" style="padding-right: 0;">
+						<tc_include file="Public:usernav_left" />
+					</div>
+					<div class="col-sm-9">
+						<ul class="nav nav-tabs list-header" style="border-bottom: 0;border-top: #555 solid 1px;margin: 0;">
+							<li class="active list-title" style="border-top: #555 solid 4px;padding:0 10px;">
+								<h4 style="font-size: 16px;">我收藏的文章</h4>
+							</li>
+							<li class="pull-right more" style="border-top: transparent solid 4px;padding: 10px;display: none;">
+								最新更新20条文章，如查看更多文章请点击&nbsp;<a href="" class="label label-warning" style="background-color:#fa7a25;border-radius: 6px;min-width: inherit;display: inline-block;padding: 0 4px;">More</a>
+							</li>
+						</ul>
+						<ul id="list_container" style="margin: 0;">
+
+						</ul>
+
+					</div>
+				</div>
+			</div>
+			</div>
+
+		<div style="background: #dbdbdb">
+			<tc_include file="Public:contact_info" />
+		</div>
+	</div>
+	<!-- /container -->
+	<div  style="position: fixed;bottom: 0;width: 100%;">
+		<style>
+			body{
+				padding-bottom: 84px;
+			}
+		</style>
+		<tc_include file="Public:footer" />
+	</div>
+	<tc_include file="Public:scripts" />
+
+<script>
+
+	$(function () {
+		ajax_get_favorites("user/favorite/ajax_get_lists",{p:__p},'我收藏的文章', function () {
+			$("#my_articles").closest('.left-nav-item').addClass('active').siblings().removeClass('active');
+			$(".list-header .more").hide();
+		});
+	});
+</script>
+</body>
+</html>

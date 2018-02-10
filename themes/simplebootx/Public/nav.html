@@ -1,0 +1,466 @@
+<style>
+    body .navbar {
+        -webkit-box-shadow: 0 0 0 0 rgba(50, 50, 50, 0.08);
+        -moz-box-shadow: 0 0 0 0 rgba(50, 50, 50, 0.08);
+        box-shadow: 0 0 0 0 rgba(50, 50, 50, 0.08);
+    }
+
+    .navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
+        border: 1px solid #606060;
+        border-bottom: 1px solid transparent;
+        background-color: #5d5d5d;
+        cursor: pointer;
+    }
+
+    .main-navs-bar .nav-tabs > li {
+        margin-bottom: 0;
+    }
+
+    .main-navs-bar .nav > li > a {
+        border: 1px solid transparent;
+        padding: 15px 15px;
+        text-shadow: none;
+    }
+
+    .main-navs-bar .nav.navbar-nav > li > a {
+        border-left: 1px solid #606060;
+    }
+
+    .main-navs-bar .nav.navbar-nav > li:last-child > a {
+        border-right: 1px solid #606060;
+    }
+    #main-menu ul.navbar-right > li:nth-of-type(2) > a {
+        /*border-right: 1px solid #606060;*/
+    }
+
+    .main-navs-bar .nav.navbar-nav:not([id='main-menu-user']) > li > a:hover {
+        border-top: 1px solid transparent;
+        border-right: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+    }
+
+    .main-navs-bar .nav.navbar-nav > li:last-child > a:hover {
+        border-top: 1px solid transparent;
+        border-right: 1px solid #606060;
+        border-bottom: 1px solid transparent;
+    }
+
+    .main-navs-bar .collapse {
+        display: block;
+    }
+
+    .main-navs-bar .user .triangle-up {
+        display: none;
+    }
+
+    .main-navs-bar .user.open .triangle-up {
+        display: block;
+    }
+
+    .navbar .nav .user .dropdown-menu li > a {
+        padding: 3px 10px;
+    }
+    ul#myTabs li[role="presentation"] > a.presentation-a {
+        color: #fff;
+        margin-left: 2px;
+        width: 70px;
+    }
+    ul#myTabs li:nth-of-type(4) > a {
+        width: 100px !important;
+    }
+    .navbar .nav .user {
+        padding: 0;
+        line-height: 40px;
+    }
+    .nav .user.open > a{
+        background:none;
+    }
+    .nav .user.open > a:focus{
+        border-color: #000000;
+    }
+    .navbar .nav .user .headicon {
+        margin: 0 5px;
+        height: 20px;
+    }
+    @media (min-width: 768px) {
+        .form-inline .input-group {
+        }
+    }
+    .row {
+        margin: 0;
+    }
+    .container {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .nav .user.open > a:focus{
+        border-left: 1px solid #606060;
+    }
+    .ellipsis{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+
+{:hook('body_start')}
+<script type="text/javascript" src="__TMPL__Public/assets/js/qrcode.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("input[name='keyword']")
+            .bind('focus', function (event) {
+                $(this).prev("span").css('border-color', 'rgb(116, 185, 239)');
+            })
+            .bind('blur', function (event) {
+                $(this).prev("span").css('border-color', 'rgb(187, 187, 187)');
+            });
+    });
+</script>
+<if condition="sp_is_mobile()">
+    <style id="down-style">
+        #navbar-fixed-top{
+            top:182px;
+            position: absolute;
+        }
+        body{
+            padding-top: 290px;
+        }
+        .main-navs-bar .container {
+             width: 100%;
+        }
+        @media (min-width: 768px){
+            .col-sm-3>div {
+                width: auto;
+            }
+        }
+
+    </style>
+    <div class="download-bar" style="width: 100%;background:none;position: absolute;left: 0;top: 0;z-index: 9999;">
+        <table style="width: 100%;background-color: #484647;">
+            <tbody>
+            <tr>
+                <td style=" font-size: 36px;text-align: center;padding: 0;" onclick="$(this).closest('.download-bar').hide();$('#down-style').remove();">
+                    <img src="__ROOT__/public/images/app_download_left.jpg">
+                </td>
+                <td style="padding:0;">
+                    <if condition="sp_is_ios()">
+
+                        <a href="https://itunes.apple.com/cn/app/%E4%BB%8A%E6%97%A5%E5%8D%8E%E9%97%BB/id1272606001?mt=8">
+                            <img src="__ROOT__/public/images/app_download_right.jpg">
+                        </a>
+
+                        <else/>
+                        <a href="https://play.google.com/store/apps/details?id=com.aisi.huawen">
+                            <img src="__ROOT__/public/images/app_download_right.jpg">
+                        </a>
+                    </if>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%;display: none;">
+            <tbody>
+            <tr>
+                <td style="width: 120px; font-size: 36px;text-align: center;">
+                    <span class="glyphicon glyphicon-remove" onclick="$(this).closest('.download-bar').hide();"></span>
+                </td>
+                <td style="width: 120px;padding: 15px;">
+                    <img src="__ROOT__/public/images/app_logo.png">
+                </td>
+                <td class="text-left" style="padding: 10px;">
+                    <p style="font-size: 28px;">
+                        今日华闻 - 欧洲综合生活资讯平台
+                    </p>
+
+                </td>
+                <td style="width: 180px;">
+                    <if condition="sp_is_ios()">
+
+                        <a href="https://itunes.apple.com/cn/app/%E4%BB%8A%E6%97%A5%E5%8D%8E%E9%97%BB/id1272606001?mt=8" class="btn btn-primary" style="font-size: 36px;padding: 15px 25px;">下载</a>
+
+                        <else/>
+                        <a href="https://play.google.com/store/apps/details?id=com.aisi.huawen" class="btn btn-primary" style="font-size: 36px;padding: 15px 25px;">下载</a>
+                    </if>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</if>
+<div id="navbar-fixed-top" class="navbar navbar-fixed-top" style="margin: 0;">
+    <div class="navbar-inner main-navs-bar" style="background: #000;position: relative;">
+        <div class="container" style="padding: 0.5px 0px;">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="__ROOT__/"><img src="__TMPL__Public/assets/images/top_logo.png" style="width:127px;vertical-align:bottom; margin: 10px 0 0 0;" /></a>
+
+            <div class="nav-collapse collapse" id="main-menu">
+
+                <php>
+                    $navs=sp_get_submenu(0);
+                    $_id = $id = I('get.navid',0,'intval');
+                    if($id>0){
+                        $pid = M("Nav")->where(array('id'=>$id))->getField('parentid');
+                        $pid = intval($pid);
+                        if($pid>0){
+                            $_id = $pid;
+                        }
+                    }
+                    $active_nav = array();
+                    $active_nav['label'] = $navs[0]['label'];
+                </php>
+                <ul id="myTabs" class="nav nav-tabs" role="tablist" style="margin-top: 23px;margin-left: 20px ;margin-bottom: 0;border-bottom: 0;">
+                    <php>
+                        $active_nav['subnavs'] = $subnavs = array();
+                    </php>
+                    <foreach name="navs" key="i" item="vo">
+
+                        <if condition="(intval($vo['id']) eq $_id) or ($i eq 0 and $_id eq $i)">
+                            <php>
+                                $active_nav['subnavs'] = $subnavs = sp_get_submenu($vo['id']);
+                            </php>
+                            <if condition="($i eq 0)">
+                                <php>
+                                    $MODULE_INDEX = 'home';
+                                </php>
+                            </if>
+                            <li role="presentation" class="active">
+                                <a class="presentation-a" href="{$vo.href}">{$vo.label}</a>
+
+                                <div class="absolute triangle-up" style="bottom: -1px;left:33%"></div>
+                            </li>
+                            <else/>
+                            <li role="presentation">
+                                <a class="presentation-a" href="{$vo.href}">{$vo.label}</a>
+                            </li>
+                        </if>
+                    </foreach>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right" style="margin-top: 20px; margin-right: 0;">
+                    <if condition="sp_is_user_login()">
+                        <li class="dropdown user login">
+                            <a class="dropdown-toggle user" data-toggle="dropdown" href="#" style="font-size: 22px;">
+                                <php>
+                                    $user = sp_get_current_user();
+                                </php>
+                                <if condition="empty($user['avatar'])">
+                                    <img src="__TMPL__Public/assets/images/svg-icons/sign_in.svg" class="headicon"/>
+                                    <else/>
+                                    <img src="{:sp_get_user_avatar_url($user['avatar'])}?t={:time()}" class="headicon"/>
+                                </if>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{:U('user/center/index')}"><i class="fa fa-user hide"></i> &nbsp;帐户设置</a></li>
+                                <li><a href="{:U('user/index/logout')}"><i class="fa fa-sign-out hide"></i> &nbsp;退出帐户</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{:U('user/notification/index')}">&nbsp;消息</a></li>
+                                <li><a href="{:U('user/favorite/index')}">&nbsp;收藏夹</a></li>
+                            </ul>
+                        </li>
+                        <else/>
+                        <li class="user offline">
+                            <a class="user" href="{:U('user/login/index')}" style="border-bottom: 0;">
+                                <img src="__TMPL__Public/assets/images/svg-icons/sign_in.svg" class="headicon"/>
+                            </a>
+
+                            <div class="absolute triangle-up" style="bottom: 0;left:33%"></div>
+                        </li>
+                    </if>
+
+
+                    <li class="user offline" style="padding-top: 1px;">
+                        <a class=" user" href="http://weibo.com/huawenzhoukan?c=spr_qdhz_bd_baidusmt_weibo_s&nick=%E5%8D%8E%E9%97%BB%E5%91%A8%E5%88%8A&is_hot=1" target="_self">
+                            <img src="__TMPL__Public/assets/images/svg-icons/Weibo-gray.svg" class="headicon" style="transform: scale(1.8);"/>
+                        </a>
+                    </li>
+                    <li class="user offline" style="padding-top: 1px;">
+                        <a class="dropdown-toggle user" data-toggle="dropdown" href="#ihuawen_qrcode" data-target="ihuawen_qrcode" style="border-bottom: 0;" aria-haspopup="true" aria-expanded="false">
+                            <img src="__TMPL__Public/assets/images/svg-icons/Wechat-gray.svg" class="headicon" style="transform: scale(1.8);"/>
+                        </a>
+                        <ul id="ihuawen_qrcode" class="dropdown-menu" style="text-align: center;padding: 0;top:120%;">
+                            <li>
+                                <div id="qrcode2" style="width: 200px;margin:0 auto; padding: 20px 20px 0 20px;">
+                                    <img src="__TMPL__Public/assets/images/qrcode_for_gh_a308f680a5d7_1280.jpg">
+                                </div>
+                                <script type="text/javascript">
+                                    //var qrcode = new QRCode(document.getElementById("qrcode2"), {});
+                                    function makeCode() {
+                                        qrcode.makeCode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+                                    }
+                                    //makeCode();
+                                </script>
+                                <p></p>
+
+                                <p style="line-height: 10px;">微信扫一扫</p>
+                                <p style="line-height: 10px;margin-bottom: 25px;">关注我们的微信公众号</p>
+
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                        <div class="absolute triangle-up" style="bottom: -20%;left:33%"></div>
+                    </li>
+                    <li class="user offline dropdown"  data-event="click">
+                        <php>
+                            $tags = sp_get_area_tags();
+                        </php>
+                        <if condition="!empty($tags)">
+
+                            <span id="ite_tmp" style="display: none;"></span>
+                            <a href="#" style="line-height: 40px;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img src="__TMPL__Public/assets/images/svg-icons/location-gray.svg" class="headicon" style="margin-top: 8px;margin-right: -5px;"/>
+
+                            <button id="dLabel" type="button"style="background: #000;color:#fff;border-color: #000;margin-top:15px;">
+                                全部<span class="caret"></span>
+                            </button>
+                                </a>
+                            <ul id="area_tag" class="dropdown-menu" aria-labelledby="dLabel" style="min-width: inherit;">
+                                <li data-id="">
+                                    <a href="#"><span class="text">全部</span></a></li>
+                                <foreach name="tags" item="tag">
+                                    <if condition="$tag.id eq $_COOKIE['area_tag_id']">
+                                        <li class="selected" data-id="{$tag.id}">
+                                            <a href="#"><span class="text">{$tag.name}</span></a></li>
+                                        <else/>
+                                        <li data-id="{$tag.id}">
+                                            <a href="#"><span class="text">{$tag.name}</span></a></li>
+                                    </if>
+                                </foreach>
+                            </ul>
+
+                            <script src="__PUBLIC__/js/cookie.js"></script>
+                            <script>
+
+                                var area_name = $("#area_tag>li.selected .text").eq(0).text();
+                                area_name = area_name?area_name:'全部';
+
+                                $("#ite_tmp").html(area_name);
+                                var tmp_width = $("#ite_tmp").width();
+                                $("#dLabel").html(area_name+'<span class="caret"></span>');
+
+                                $("#area_tag>li:not(.selected)").click(function(){
+                                    var val = $(this).data('id');
+                                    var expiresDays = 365;
+                                    $.cookie('area_tag_id',val,{expires:expiresDays});
+                                    window.location.reload();
+                                });
+
+                            </script>
+                        </if>
+
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+    <if condition="$USERCENTER neq '1'">
+        <if condition="$MODULE_INDEX eq 'home'">
+            <php>
+                $terms = \Portal\Service\ApiService::terms("",array('status'=>array('NEQ','-1'),'name'=>array('NEQ','华闻专栏'),'taxonomy'=>'article'));
+            </php>
+
+            <div style="background-color: #FFF;">
+                <div class="container" style="padding: 0;background-color: #FFF;">
+                    <div class="row">
+                        <div class="col-sm-9" style="text-align: left; padding-left: 0; width: 80%; ">
+                            <div style="padding-top: 8px;font-size: 16px;">
+                                <foreach name="terms" item="vo">
+                                    <php>
+                                        $vo['id'] = $vo['term_id'];
+                                    </php>
+                                    <if condition="($_GET['id'] eq $vo['id']) or ($term['term_id'] eq $vo['id'])">
+                                        <php>
+                                            $vo['label'] = $vo['name'];
+                                            $curnav_name = $vo['name'];
+                                            $curnav_subname = $vo['sublabel'];
+                                            $active_nav['subactive_nav'] = $vo;
+                                            $arr = explode('|', $vo['sublabel']);
+                                            $active_nav['subactive_nav']['chinese_label'] = htmlspecialchars_decode($arr[0]);
+                                            $active_nav['subactive_nav']['english_label'] = htmlspecialchars_decode($arr[1]);
+                                        </php>
+                                        <a href="{:U('Portal/List/index',array('id'=>$vo['id']))}" style="padding: 0 3px;color:#941415;">{$vo.name}</a>
+                                        <else/>
+                                        <a href="{:U('Portal/List/index',array('id'=>$vo['id']))}" style="padding: 0 3px;color: gray;">{$vo.name}</a>
+                                    </if>
+                                </foreach>
+                            </div>
+                        </div>
+                        <div class="col-sm-3" style="padding-right: 0px; width: 20%;">
+                            <div class="pull-right" style="padding: 4px 0;">
+                                <form method="post" class="form-inline" action="{:U('portal/search/index')}"
+                                      style="margin: 0">
+                                    <div class="input-group" style="float: right;">
+                                        <span class="input-group-addon glyphicon glyphicon-search" style="color: rgb(191, 191, 191);top: 0; background-color: transparent; border-color: rgb(187, 187, 187);-webkit-border-radius: 0 ;-moz-border-radius: 0;border-radius: 0;"></span>
+                                        <input type="text" class="form-control" name="keyword" placeholder="标题,人名,关键字" value="{:I('get.keyword')}" style="border-left: 0;padding: 0; height: 28px;">
+                                        <button class="btn btn-default hide" type="submit" style="margin-top: 0; background-color: rgb(187, 187, 187); color: #fff;">Go!</button>
+                                    </div><!-- /input-group -->
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <elseif condition="$subnavs"/>
+                <php>
+                    $navid = I('get.navid',0,'intval');
+                </php>
+                <div style="background-color: #FFF;">
+                    <div class="container" style="padding: 0;background-color: #FFF;">
+                        <div class="row">
+                            <div class="col-sm-9" style="text-align: left; padding-left: 0; width: 80%;">
+                                <php>
+                                    $curnav_name = null;
+                                </php>
+                                <div class="subnavs" style="padding-top: 8px;font-size: 16px;">
+                                    <foreach name="subnavs" item="vo" key="i">
+                                        <if condition="$navid eq $vo['id']">
+                                            <php>
+                                                $curnav_name = $vo['label'];
+                                                $curnav_subname = $vo['sublabel'];
+                                                $active_nav['subactive_nav'] = $vo;
+                                                $arr = explode('|', $vo['sublabel']);
+                                                $active_nav['subactive_nav']['chinese_label'] = htmlspecialchars_decode($arr[0]);
+                                                $active_nav['subactive_nav']['english_label'] = htmlspecialchars_decode($arr[1]);
+                                            </php>
+                                            <a href="{$vo.href}" style="padding: 0 3px;color:#941415;">{$vo.label}</a>
+                                            <else/>
+                                            <a href="{$vo.href}" style="padding: 0 3px;color: gray;">{$vo.label}</a>
+                                        </if>
+                                    </foreach>
+                                </div>
+                                <php>
+                                    if(!$curnav_name){
+                                    echo '<script>$(".subnavs>a").eq(0).css({color:"#941415"});</script>';
+                                    }
+                                </php>
+                            </div>
+                            <div class="col-sm-3" style="padding-right: 0px; width: 20%;">
+                                <div class="pull-right" style="padding: 4px 0;">
+                                    <form method="post" class="form-inline" action="{:U('portal/search/index')}"
+                                          style="margin: 0">
+                                        <div class="input-group">
+                                            <span class="input-group-addon glyphicon glyphicon-search" style="color: rgb(191, 191, 191);top: 0; background-color: transparent; border-color: rgb(187, 187, 187);-webkit-border-radius: 0 ;-moz-border-radius: 0;border-radius: 0;"></span>
+                                            <input type="text" class="form-control" name="keyword" placeholder="标题,人名,关键字" value="{:I('get.keyword')}" style="border-left: 0;padding: 0; height: 28px;">
+                                            <button class="btn btn-default hide" type="submit" style="margin-top: 0; background-color: rgb(187, 187, 187); color: #fff;">Go!</button>
+                                        </div><!-- /input-group -->
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </if>
+        </if>
+    </if>
+</div>
+
+<!------------------------------------------------->

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{$site_name}</title>
+<meta name="keywords" content="{$site_seo_keywords}" />
+<meta name="description" content="{$site_seo_description}">
+<meta name="author" content="ihuawen">
+<tc_include file="Public:head" />
+<style>
+	.control-label{
+		font-weight: bold;
+		float: left;
+		width: 70px;
+	}
+	.navbar .nav > li > a {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+
+	.well{padding: 10px;border-radius: 0;background: #FFFFFF;}
+	.well:after{
+		content: ' ';
+		clear: both;
+	}
+	.well{
+		padding: 20px 40px;
+	}
+	.uploaded_avatar_area{
+		position: absolute;
+		width: 150px;
+		left: 110%;
+		top: 0;
+		margin-top: 0;
+		background: #ddd;
+		padding: 10px;
+		display: none;
+	}
+	.uploaded_avatar_btns{
+		margin-top: 20px;
+	}
+	/*.uploaded_avatar_area .uploaded_avatar_btns{display: none;}*/
+
+
+	td{padding: 5px}
+	.title{
+		font-size: 16px;
+	}
+</style>
+</head>
+<body class="body-gray" id="top">
+	<tc_include file="Public:nav" />
+		<div class="container tc-main" >
+			<div class="row">
+				<style>
+					.user-nav .label{
+						background-color: #FFFFFF;
+						color: #333333;
+						border-radius: 0;
+					}
+					.user-nav .label.active{
+						background-color: #555555;
+						color: #FFFFFF;
+					}
+					.panel{
+						border-radius: 0;
+					}
+					.user-nav .label,.user-nav .badge{
+						font-size: 14px;;
+					}
+				</style>
+				<div class="well user-nav" style="padding: 10px 40px;">
+					<a href="{:U('user/center/index')}"><span class="label active">账户设置</span></a>
+					<a href="{:U('user/notification/index')}"><span class="label">消息</span></a>
+					<a href="{:U('user/favorite/index')}"><span class="label">收藏夹</span></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="well text-center" style="padding: 25px 40px;">
+					<span style="width: 120px;display: inline-block;position: relative;">
+						<if condition="empty($avatar)">
+							<img src="__TMPL__Public/assets/images/headicon_128.png" class="headicon"/>
+							<else/>
+							<img src="{:sp_get_user_avatar_url($avatar)}?t={:time()}" class="headicon"/>
+						</if>
+					<div>
+						<input type="file" id="avatar_uploder" name="file" value="" style="display: none;"/>
+						<a class="btn btn-sm confirm_avatar_btn" onclick="$(this).prev('input').click()" style="width: 100%;">更改头像</a>
+					</div>
+					<div class="uploaded_avatar_area">
+						<div class="uploaded_avatar_btns">
+							<a class="btn btn-primary confirm_avatar_btn" onclick="update_avatar()">确定</a>
+							<a class="btn" onclick="reloadPage()">取消</a>
+						</div>
+					</div>
+					</span>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="well user-info">
+					<table style="width: 100%">
+						<thead>
+						<tr style="border-bottom: 1px solid #dddddd">
+							<td width="160" class="title">个人信息</td>
+							<td class="text-right"><a href="{:U('user/profile/password')}">修改密码</a> </td>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td style="padding-top: 30px;">昵称</td>
+							<td style="padding-top: 30px;">{$user_nicename|default='未填写'}</td>
+						</tr>
+						<tr>
+							<td>注册邮箱</td>
+							<td>{$user_email}</td>
+						</tr>
+						<tr>
+							<td>密码</td>
+							<td>***</td>
+						</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="well user-info">
+					<table style="width: 100%">
+						<thead>
+						<tr style="border-bottom: 1px solid #dddddd">
+							<td width="160" class="title">详细信息</td>
+							<td class="text-right"><a href="#A">修改</a> </td>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td style="padding-top: 30px;">名字</td>
+							<td style="padding-top: 30px;">{$address.family_name}{$address.first_name}</td>
+						</tr>
+						<tr>
+							<td>地址<a id="A"></a></td>
+							<td>{$address.country}{$address.city}{$address.address1}</td>
+						</tr>
+						<tr>
+							<td>电话</td>
+							<td>{$address.contact_phone}</td>
+						</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+			<div class="well" style="background-color: #555;padding: 5px 25px;">
+				<div class="row">
+					<div class="col-sm-6" style="color: #ffffff;">
+						同意接收 < 华闻每月速递 > 邮件
+					</div>
+					<div class="col-sm-6 text-right">
+
+						<if condition="$accept_activity_email_push_status eq 1">
+							<input class="accept_activity_email_push_status" type="checkbox" name="accept_activity_email_push_status" value="1" style="margin: 0;" checked>
+							<else/>
+							<input class="accept_activity_email_push_status" type="checkbox" name="accept_activity_email_push_status" value="1" style="margin: 0;">
+						</if><script>
+							$(".accept_activity_email_push_status").change(function(){
+								var val = $(this).is(":checked")?1:0;
+								$.post("{:U('user/profile/set_accept_activity_email_push_status')}",{accept_activity_email_push_status:val}, function (response) {
+
+									if(response.state!='success'){
+
+										alert(response.info);
+									}
+								});
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="well" style="background-color: #555;padding: 5px 25px;">
+				<div class="row">
+					<div class="col-sm-6" style="color: #ffffff;">
+						同意接收华闻每活动邮件
+					</div>
+					<div class="col-sm-6 text-right">
+						<if condition="$accept_activity_email_push eq 1">
+							<input class="accept_activity_email_push_status" type="checkbox" name="accept_activity_email_push_status" value="1" style="margin: 0;" checked>
+							<else/>
+							<input class="accept_activity_email_push_status" type="checkbox" name="accept_activity_email_push_status" value="1" style="margin: 0;">
+						</if>
+						<script>
+							$(".accept_activity_email_push_status").change(function(){
+								var val = $(this).is(":checked")?1:0;
+								$.post("{:U('user/profile/set_accept_activity_email_push_status')}",{accept_activity_email_push_status:val}, function (response) {
+
+									if(response.state!='success'){
+
+										alert(response.info);
+									}
+								});
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+			<div class="well">
+				<div class="row">
+					<table style="width: 100%;">
+						<tbody>
+						<tr>
+							<td style="padding-right: 20px;">
+								<form class="js-ajax-form" method="post" action="{:leuu('user/address/edit_post')}">
+									<div class="form-group">
+										<label for="first_name">名字</label>
+										<input type="text" class="form-control" id="first_name" name="address[first_name]"  value="{$address.first_name}">
+									</div>
+									<div class="form-group">
+										<label for="family_name">姓</label>
+										<input type="text" class="form-control" id="family_name" name="address[family_name]"  value="{$address.family_name}">
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-4" style="padding-left: 0;">
+												<div class="row">
+													性别
+												</div>
+												<div class="radio" style="display: inline-block;">
+													<label>
+														<if condition="$sex eq 1">
+															<input type="radio" name="sex" value="1" checked>
+															<else/>
+															<input type="radio" name="sex" value="1">
+														</if>
+														男
+													</label>
+												</div>
+												<div class="radio" style="display: inline-block;">
+													<label>
+														<if condition="$sex neq 1">
+															<input type="radio" name="sex" value="0" checked>
+															<else/>
+															<input type="radio" name="sex" value="0">
+														</if>
+														女
+													</label>
+												</div>
+											</div>
+											<div class="col-sm-8">
+												<php>
+													$user_year = date('Y',strtotime($birthday));
+													$user_month = date('m',strtotime($birthday));
+													$user_day = date('d',strtotime($birthday));
+
+													$years = array();
+													for($i=-47;$i<=0;$i++){
+													$years[] = date('Y',strtotime(($i<0?$i:"+".$i)." years"));
+													}
+
+													$months = array();
+													for($i=1;$i<13;$i++){
+													$months[]=$i;
+													}
+
+													$all_days = intval(date('t'));
+													$days = array();
+													for($i=1;$i<$all_days+1;$i++){
+													$days[] = $i;
+													}
+												</php>
+												<label for="year">生日</label>
+												<select id="year" name="year" required="required" style="width: 100px;">
+													<option value="">年</option>
+													<foreach name="years" item="year">
+
+														<if condition="$user_year eq $year">
+															<option value="{$year}" selected>{$year}</option>
+															<else/>
+															<option value="{$year}">{$year}</option>
+														</if>
+													</foreach>
+												</select>
+
+												<select id="month" name="month" required="required" style="width: 100px;">
+													<option value="">月</option>
+													<foreach name="months" item="month">
+
+														<if condition="$user_month eq $month">
+															<option value="{$month}" selected>{$month}</option>
+															<else/>
+															<option value="{$month}">{$month}</option>
+														</if>
+													</foreach>
+												</select>
+
+												<select id="day" name="day" required="required" style="width: 100px;">
+													<option value="">日</option>
+													<foreach name="days" item="day">
+
+														<if condition="$user_day eq $day">
+															<option value="{$day}" selected>{$day}</option>
+															<else/>
+															<option value="{$day}">{$day}</option>
+														</if>
+													</foreach>
+												</select>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="form-group">
+										<label for="address1">房间号/单元号/楼号/小区</label>
+										<input type="text" class="form-control" id="address1" name="address[address1]"  value="{$address.address1}">
+									</div>
+									<div class="form-group">
+										<label for="address2">街/路</label>
+										<input type="text" class="form-control" id="address2" name="address[address2]" value="{$address.address2}">
+									</div>
+									<div class="form-group">
+										<label for="address3">行政区</label>
+										<input type="text" class="form-control" id="address3" name="address[address3]"  value="{$address.address3}">
+									</div>
+									<div class="form-group">
+										<div class="col-sm-6" style="padding-left: 0;">
+											<label for="city">城市</label>
+											<input type="text" class="form-control" id="city" name="address[city]"  value="{$address.city}">
+										</div>
+										<div class="col-sm-6">
+											<label for="country">国家</label>
+											<select id="country" name="address[country]" required="required">
+												<option value="">请选择国家</option>
+												<foreach name="countries" item="row">
+
+													<if condition="$address['country'] eq $row['country_name']">
+														<option value="{$row.country_name}" selected>{$row.country_name}</option>
+														<else/>
+														<option value="{$row.country_name}">{$row.country_name}</option>
+													</if>
+												</foreach>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-sm-6" style="padding-left: 0;">
+											<label for="zipcode">邮编</label>
+											<input type="text" class="form-control" id="zipcode" name="address[zipcode]"  value="{$address.zipcode}">
+										</div>
+										<div class="col-sm-6" style="height:70px;"></div>
+									</div>
+									<div class="form-group">
+										<div class="col-sm-6" style="padding-left: 0;">
+											<label for="contact_phone">电话</label>
+											<input type="text" class="form-control" id="contact_phone" name="address[contact_phone]"  value="{$address.contact_phone}">
+										</div>
+										<div class="col-sm-6">
+											<label for="home_phone">家庭电话</label>
+											<input type="text" class="form-control" id="home_phone" name="address[home_phone]" value="{$address.home_phone}">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-sm-6" style="padding-left: 0;padding-top: 20px;">
+											<button type="submit" class="btn btn-warning form-control">确定</button>
+										</div>
+										<div class="col-sm-6" style="height:70px;"></div>
+									</div>
+
+								</form>
+							</td>
+							<td style="width: 200px;background-color: #f0f0f0;vertical-align: top;padding:20px 25px;">
+								·为能给您提供更好、更确的服务，请认真填写个人信息。<br/><br/>
+								·ihuawen.com网站保护用户的个人隐私，不公开用户的姓名、地址、电子邮箱和笔名，详细请参见服务协议。
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div style="background: #dbdbdb">
+				<tc_include file="Public:contact_info" />
+			</div>
+	</div>
+	<!-- /container -->
+	<div  style="position: fixed;bottom: 0;width: 100%;">
+		<style>
+			body{
+				padding-bottom: 84px;
+			}
+		</style>
+		<tc_include file="Public:footer" />
+	</div>
+
+	<tc_include file="Public:scripts" />
+	<script type="text/javascript">
+		function update_avatar(){
+			var area=$(".uploaded_avatar_area img").data("area");
+			$.post("{:U('profile/avatar_update')}",area,
+					function(data){
+						if(data.status==1){
+							reloadPage(window);
+						}
+
+					},"json");
+
+		}
+		function avatar_upload(obj){
+			var $fileinput=$(obj);
+			/* $(obj)
+			 .show()
+			 .ajaxComplete(function(){
+			 $(this).hide();
+			 }); */
+			Wind.css("jcrop");
+			Wind.use("ajaxfileupload","jcrop","noty",function(){
+				$.ajaxFileUpload({
+					url:"{:U('profile/avatar_upload')}",
+					secureuri:false,
+					fileElementId:"avatar_uploder",
+					dataType: 'json',
+					data:{},
+					success: function (data, status){
+						if(data.status==1){
+							$("#avatar_uploder").next().hide();
+							var $uploaded_area=$(".uploaded_avatar_area");
+							$uploaded_area.show();
+							$uploaded_area.find("img").remove();
+							var src= "__UPLOAD__avatar/"+data.data.file;
+							var $img=$("<img/>").attr("src",src);
+							$img.prependTo($uploaded_area);
+//							$(".uploaded_avatar_btns").show();
+							var img = new Image();
+							img.src=src;
+
+							var callback=function(){
+								console.log(img.width);
+								$img.Jcrop({
+									aspectRatio:1,
+									trueSize: [img.width,img.height],
+									setSelect: [ 0, 0, 100, 100 ],
+									onSelect: function(c){
+										$img.data("area",c);
+									}
+								});
+							}
+
+							if(img.complete){
+								callback();
+							}else{
+								img.onload=callback;
+							}
+
+						}else{
+							noty({text: data.info,
+								type:'error',
+								layout:'center'
+							});
+						}
+
+					},
+					error: function (data, status, e){}
+				});
+			});
+
+
+
+			return false;
+		}
+		avatar_upload();
+		$("#avatar_uploder").change(function () {
+			avatar_upload(this);
+		});
+	</script>
+</body>
+</html>

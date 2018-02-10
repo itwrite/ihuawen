@@ -1,0 +1,77 @@
+<php>
+    $sub_label_arr = explode('|',$vo['sublabel']);
+</php>
+<style>
+    .tc-gridbox .header .tc-title {
+        text-indent: 12px;
+        font-size: 14px;
+    }
+    .tc-gridbox .tc-body {
+        padding-left: 12px;
+        padding-right: 12px;
+        font-size: 12px;
+        height: 100px;
+    }
+    .tc-gridbox p{
+        line-height: 24px;
+    }
+</style>
+<div class="tc-gridbox">
+    <div class="header">
+        <table style="width:100%;border-bottom: 1px solid #ddd; " cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="text-left" style="padding-left: 10px;">
+                    <h4>
+                        <if condition="count($sub_label_arr) gt 1">
+                            <p style="font-size: 15px;">{$sub_label_arr[0]} {$sub_label_arr[1]}</p>
+                        </if>
+                    </h4>
+                </td>
+                <td style="width: 50px;border-left: 1px solid #ddd;padding: 5px 5px 0; vertical-align: middle;">
+                    {:sp_get_icon_svg($vo['icon'])}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <if condition="!empty($smeta['thumb'])">
+            <div class="item-image">
+                <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+                    <img src="{:sp_get_asset_upload_path($smeta['thumb'])}"
+                         class="img-responsive" alt="{$vo.post_title}">
+                </a>
+            </div>
+            <else />
+        </if>
+
+        <h3 class="text-left tc-title">
+            <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_title}</a>
+        </h3>
+        <hr>
+    </div>
+    <div class="body tc-body hide">
+        <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">{$vo.post_excerpt|msubstr=0,256}</a>
+    </div>
+
+    <div class="body" style="min-height:100px;height: auto; margin-top: 10px;margin-bottom: 0;">
+
+        <a href="{:leuu('article/index',array('id'=>$vo['object_id'],'navid'=>$navid))}">
+            <p class="ellipsis" style="font-size: 14px;color:gray;height: auto;white-space: normal; padding: 0;overflow: hidden; margin: 0 auto; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; ">
+                {:msubstr($vo['post_excerpt'],0,135,'utf-8',false)}
+            </p></a>
+    </div>
+
+    <div class="footer">
+        <div class="pull-left hide">
+            <span class="meta">{$vo.post_date}</span>
+        </div>
+        <div class="pull-right hide">
+            <a href="javascript:;"><i class="fa fa-eye"></i><span>{$vo.post_hits}</span></a>
+            <a href="{:U('article/do_like',array('id'=>$vo['object_id']))}" class="js-count-btn"><i class="fa fa-thumbs-up"></i><span class="count">{$vo.post_like}</span></a>
+            <a href="{:U('user/favorite/do_favorite',array('id'=>$vo['object_id']))}" class="js-favorite-btn" data-title="{$vo.post_title}" data-url="{:leuu('portal/article/index',array('id'=>$vo['object_id']))}" data-key="{:sp_get_favorite_key('posts',$vo['object_id'])}">
+                <i class="fa fa-star-o"></i>
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

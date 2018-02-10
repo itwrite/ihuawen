@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>接口文档</title>
+    <link href="__PUBLIC__/js/bootstrap-3.3.5-dist/css/bootstrap.css" rel="stylesheet">
+    <link href="__PUBLIC__/js/lap/msky.ui.lap.all.css" rel="stylesheet">
+    <link href="__TMPL__Public/assets/js/jquery-jsonview/dist/jquery.jsonview.css" rel="stylesheet">
+
+    <script type="text/javascript" src="__PUBLIC__/js/lap/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/lap/msky.ui.lap.all.js"></script>
+
+    <script src="__TMPL__Public/assets/js/jquery-jsonview/dist/jquery.jsonview.js"></script>
+
+    <script>
+        function hide_loading(text){
+            __is_interval = false;
+            $("#loading .caption").html(text);
+            setTimeout(function () {
+                $("#loading .caption").hide();
+            },4);
+        }
+
+        function http_request(formthis){
+
+            var that = formthis;
+
+            var ajaxType = String($(formthis).attr('method')).toUpperCase();
+            var actionUrl = $(formthis).attr('action');
+
+            switch (ajaxType){
+                case 'GET':
+                    $.getJSON(actionUrl,$(formthis).serialize(), function (response) {
+                        console.log(response);
+                        if(typeof response=='object'&& response.hasOwnProperty('data') && response.data && typeof response.data['token'] !='undefined' && response.data['token']!=''){
+                            $("input[name='token']").val(response.data['token']);
+                        }
+                        $(that).parent().find('.response-result').JSONView(response);
+                        $("#loading").hide();
+                    }).error(function () {
+                        hide_loading('网络异常！');
+                    });
+                    break;
+                case 'POST':
+                    var dataArr = $(formthis).serializeArray();
+                    var formData = new FormData();
+
+                    for(var i in dataArr){
+                        var obj = dataArr[i];
+                        formData.append(obj['name'],obj['value']);
+                    }
+                    $(formthis).find("input[type='file']").each(function (i, n) {
+                        formData.append($(n).attr('name'),$(n)[0].files[0]);
+                    });
+
+                    $.ajax({
+                        url : actionUrl,
+                        type : ajaxType,
+                        data : formData,
+                        // 告诉jQuery不要去处理发送的数据
+                        processData : false,
+                        // 告诉jQuery不要去设置Content-Type请求头
+                        contentType : false,
+                        beforeSend:function(){
+                            console.log("正在进行，请稍候");
+                        },
+                        success: function (response) {
+                            console.log(response);
+                            if(typeof response=='object'&& response.hasOwnProperty('data') && response.data && typeof response.data['token'] !='undefined' && response.data['token']!=''){
+                                $("input[name='token']").val(response.data['token']);
+                            }
+                            $(that).parent().find('.response-result').JSONView(response);
+                            $("#loading").hide();
+                        },
+                        error: function () {
+                            hide_loading('网络异常！');
+                        }
+                    });
+                    break;
+            }
+
+        }
+
+        $(function () {
+            $("form").submit(function () {
+
+                var that = this;
+                http_request(this);
+                return false;
+                var method = $(this).attr('method');
+                var url = $(this).attr('action');
+
+                console.log($(this).serializeArray());
+
+                var data = $(this).serialize();
+                $("#loading").show();
+                $(that).parent().find('.response-result').html('');
+                switch (method) {
+                    case 'get':
+                        $.getJSON(url, data, function (response) {
+                            console.log(response);
+                            $(that).parent().find('.response-result').JSONView(response);
+
+
+                            $("#loading").hide();
+                        }).error(function() { hide_loading('网络异常！'); });
+                        break;
+                    case 'post':
+                        $.post(url, data, function (response) {
+                            console.log(response);
+                            if(typeof response=='object'&& response.hasOwnProperty('data') && response.data && typeof response.data['token'] !='undefined' && response.data['token']!=''){
+                                $("input[name='token']").val(response.data['token']);
+                            }
+                            $(that).parent().find('.response-result').JSONView(response);
+                            $("#loading").hide();
+                        }).error(function() { hide_loading('网络异常！'); });
+                        break;
+
+                }
+
+                return false;
+            });
+
+
+            /**
+             *
+             */
+            $(".lap1,.lap2").lap({
+                fit: false,
+                collapsible: true,
+                autoHeight: false,
+                autoDevelop:true,
+                setSelected:false
+            });
+
+            $(".jsonview-expand-all").click(function () {
+                $(this).parent().find('.response-result').JSONView('expand');
+            });
+        })
+    </script>
+
+    <style>
+        em{color:red;}
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+            line-height: inherit;
+        }
+        .lap1>div{
+            padding-left: 20px;
+        }
+        .response-result {
+            width: 100%;
+            height: 220px;
+            margin: 20px auto -3px auto;
+            border-top: 2px dashed #EDEDED;
+            overflow: auto;
+            padding: 10px;
+        }
+
+        .jsonview .collapser,  .jsonview .collapsed{
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        #loading{
+            position: fixed;
+            left:0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.24);
+            z-index: 99;
+            display: none;
+        }
+        #loading .caption{
+            position: relative;
+            z-index: 100;
+            line-height: 40px;
+            top:35%;
+            left:46%;
+            width: 8%;
+            height: 50px;
+            background-color: #FFFFFF;
+            padding: 0.4em 0em;
+            color:#333;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            -o-border-radius: 4px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .table-striped{
+            border-bottom: 1px solid #EDEDED;
+        }
+    </style>
+</head>
+<body>
+
+<div class="lap1" style=" width:90%; margin:20px;float:left ">
+    <foreach name="interfaces" item="vo">
+        <h3><span class="label label-success">{$vo.name}</span></h3>
+        <div>
+            <div class="lap2" style="margin: 10px 22px;">
+                <foreach name="vo['paths']" key="path" item="item">
+                    <h3>
+                        <if condition="strtolower($item['method']) eq 'post'">
+                            <span class="label label-warning">{:strtoupper($item['method'])}</span>
+                            <else/>
+                            <span class="label label-primary">{:strtoupper($item['method'])}</span>
+                        </if>
+
+                        {$path}<span class="label label-default pull-right">{$item.summary}</span></h3>
+                    <div>
+                        <form class="form-horizontal" method="{$item.method}" style="margin-top: 10px;" action="{$path}">
+                            <if condition="count($item['parameters']) gt 0">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th width="150" class="text-left">Parameter</th>
+                                        <th>Value</th>
+                                        <th width="300">Description</th>
+                                        <!--<th width="120">Data Type</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <foreach name="item['parameters']" item="param">
+                                        <tr>
+                                            <td class="text-left">
+                                                <span class="label label-info">{$param.name}</span>
+                                                <if condition="$param.required eq true">
+                                                    <em>*</em>
+                                                    <else/>
+                                                    <i style="color: #808080;font-size: 12px;">(可选)</i>
+                                                </if>
+                                            </td>
+                                            <td>
+                                                <if condition="$param.required eq true">
+                                                    <input type="{$param.type}" class="form-control"  required="required"  name="{$param.name}" value="{$param.value}">
+                                                    <else/>
+                                                    <input type="{$param.type}" class="form-control"  name="{$param.name}" value="{$param.value}">
+                                                </if>
+                                            </td>
+                                            <td>
+                                                {$param.description}
+                                            </td>
+                                            <!--<td>-->
+                                                <!--{$param.type}-->
+                                            <!--</td>-->
+                                        </tr>
+                                    </foreach>
+                                    </tbody>
+                                </table>
+                            </if>
+
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Try it out!</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div style="position: relative;">
+                            <div class="response-result" contenteditable="true">
+
+                            </div>
+                            <button type="button" class="btn btn-xs btn-default pull-right jsonview-expand-all" style="position: absolute;right: 0;top:0;">JSON全部展开</button>
+                        </div>
+                    </div>
+                </foreach>
+
+            </div>
+
+        </div>
+    </foreach>
+</div>
+
+<div id="loading">
+    <div class="caption">...</div>
+</div>
+
+<script>
+    var __is_interval = true;
+    $(function () {
+        $("#loading").height($(window).height());
+        var str = '',dot = '.';
+        setInterval(function () {
+            if(str.length==3){
+                str=dot
+            }else{
+                str+=dot;
+            }
+            if(__is_interval==true){
+                $("#loading .caption").html(str);
+            }
+
+        },500);
+    });
+</script>
+</body>
+</html>

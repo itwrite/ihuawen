@@ -1,0 +1,42 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:U('AdminPostTag/index')}">标签管理</a></li>
+        <li><a href="{:U('AdminPostTag/add')}">添加标签</a></li>
+        <li class="active"><a>编辑标签</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form" action="{:U('AdminPostTag/edit_post')}" method="post">
+        <input type="hidden" name="tag_id" value="{$tag.id}" />
+        <div class="tabbable">
+            <fieldset>
+
+                <div class="control-group">
+                    <label class="control-label">名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" value="{$tag.name}"><span class="form-required">*</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+                    <div class="controls">
+                        <if condition="$tag['status'] eq 1">
+                            <input type="checkbox" value="1" checked="checked">显示
+                            <else/>
+                            <input type="checkbox" value="1">显示
+                        </if>
+
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary js-ajax-submit"type="submit">{:L('EDIT')}</button>
+            <a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
