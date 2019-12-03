@@ -30,18 +30,33 @@ class MainController extends AdminbaseController {
 		date_default_timezone_set('UTC');
 
 		$today = date('Y-m-d');
+		//网站统计
 		$lst = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__  FROM hw_site_pv WHERE visit_date='{$today}' AND source='website'");
 		$this->assign('pv_count',$lst[0]['__count__']);
-//		$lst = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__  FROM hw_site_pv WHERE visit_date='{$today}' AND source<>'website'");
-//		$this->assign('api_pv_count',$lst[0]['__count__']);
+		//api统计
+		$lst = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__  FROM hw_site_pv WHERE visit_date='{$today}' AND source<>'website'");
+		$this->assign('api_pv_count',$lst[0]['__count__']);
 
 		$yesterday = date('Y-m-d',strtotime('-1 day'));
+		//网站统计
 		$lst2 = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__ FROM hw_site_pv WHERE visit_date='{$yesterday}' AND source='website'");
 		$this->assign('yesterday_pv_count',$lst2[0]['__count__']);
-//		$lst2 = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__ FROM hw_site_pv WHERE visit_date='{$yesterday}' AND source<>'website'");
-//		$this->assign('api_yesterday_pv_count',$lst2[0]['__count__']);
+		//api统计
+		$lst2 = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__ FROM hw_site_pv WHERE visit_date='{$yesterday}' AND source<>'website'");
+		$this->assign('api_yesterday_pv_count',$lst2[0]['__count__']);
 
 
+		$minDate = date('Y-m-d',strtotime('-30 days'));
+		$report_list = M()->query("SELECT COUNT(DISTINCT ip_address) as __count__ ,visit_date FROM hw_site_pv WHERE source='website' AND visit_date>='{$minDate}' GROUP BY visit_date");
+
+		$xAxisData = array();
+		$seriesData = array();
+		foreach($report_list as $row){
+			$xAxisData[] =$row['visit_date'];// date('md',strtotime($row['visit_date']));
+			$seriesData[] = intval($row['__count__']);
+		}
+
+		$this->assign('echartsData',array('xAxisData'=>$xAxisData,'seriesData'=>$seriesData));
 
     	$this->display();
     }

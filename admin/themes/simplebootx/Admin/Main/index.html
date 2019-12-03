@@ -28,10 +28,78 @@ li {
 			</ul>
 
 		</div>
-		<div class="well">昨日访问量：{$yesterday_pv_count}, 今日访问量：{$pv_count}</div>
+		<div class="well">网站昨日访问量：{$yesterday_pv_count}, 网站今日访问量：{$pv_count}。移动端昨日访问量：{$api_yesterday_pv_count}, 移动端今日访问量：{$api_pv_count}。</div>
 
+		<div id="pv_report_chart" style="width: 100%;height: 300px;">
+
+		</div>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
+	<script src="__PUBLIC__/js/echarts.min.js"></script>
+	<script type="text/javascript">
+		var dom = document.getElementById("pv_report_chart");
+		var myChart = echarts.init(dom);
 
+		var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+		var echartsData = JSON.parse('{:json_encode($echartsData)}');
+
+//访问量统计
+		var option = {
+			title : {
+				text: '网站访问量统计',
+				subtext: ''
+			},
+			color: colors,
+
+			tooltip: {
+				// trigger: 'axis',
+				axisPointer: {
+					type: 'cross'
+				}
+			},
+//			grid: {
+//				right: '20%'
+//			},
+			xAxis: [
+				{
+					type: 'category',
+					axisTick: {
+						alignWithLabel: true
+					},
+					data: echartsData.xAxisData
+				}
+			],
+			yAxis: [
+
+				{
+					type: 'value',
+					name: '访问IP数',
+//					min: 0,
+//					max: 10000,
+					position: 'left',
+					axisLine: {
+						lineStyle: {
+							color: colors[2]
+						}
+					},
+					axisLabel: {
+						formatter: '{value}'
+					}
+				}
+			],
+			series: [
+				{
+					name:'访问IP数',
+					type:'line',
+					data:echartsData.seriesData
+				}
+			]
+		};
+		;
+		if (option && typeof option === "object") {
+			myChart.setOption(option, true);
+		}
+	</script>
 </body>
 </html>
